@@ -4,7 +4,7 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
-import { GroceryList } from '../components/GroceryList';
+import { ClientGroceryList } from '../components/GroceryList';
 
 export default function HomeScreen() {
   return (
@@ -28,7 +28,7 @@ export default function HomeScreen() {
 
           <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
             <MonoText>screens/HomeScreen.js</MonoText>
-            <GroceryList />
+            <ClientGroceryList />
           </View>
 
           <Text style={styles.getStartedText}>
