@@ -5,7 +5,6 @@ export function MonoText(props) {
     return <Text {...props} style={[props.style, { fontFamily: 'space-mono' }]} />;
 }
 
-
 const apiKey = '';
 const baseUrl = 'https://api.spoonacular.com';
 
