@@ -26,11 +26,7 @@ const baseWrapper = {
     try {
       return await (await db.collection(collection).doc(id).get()).data();
     } catch (err) {
-<<<<<<< HEAD
       return null;
-=======
-      alert(err);
->>>>>>> 971cea97a90c1f8b8acabbc9170f0743d662c214
     }
   },
   setObject: async (collection, docId, object) => {

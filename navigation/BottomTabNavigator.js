@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import LinksScreen from '../screens/LinksScreen';
 
 const BottomTab = createBottomTabNavigator();
@@ -15,21 +16,29 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={{ showLabel: false }}>
       <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Profile"
+        component={ProfileScreen}
         options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          title: 'Profile',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="user" />,
         }}
       />
       <BottomTab.Screen
-        name="Links"
+        name="Explore"
+        component={HomeScreen}
+        options={{
+          title: 'Explore',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="appstore-o" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Leaderboard"
         component={LinksScreen}
         options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          title: 'Leaderboard',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="profile" />,
         }}
       />
     </BottomTab.Navigator>
@@ -44,5 +53,7 @@ function getHeaderTitle(route) {
       return 'How to get started';
     case 'Links':
       return 'Links to learn more';
+    case 'Profile':
+      return 'User Profile';
   }
 }
