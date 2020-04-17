@@ -53,10 +53,10 @@ export default function Login(props) {
                     autoCapitalize="none"
                     placeholder="Email"
                     onChangeText={
-                        email => this.setState({ email })
+                        email => setEmail(email)
                     }
                     value={
-                        this.state.email
+                        email
                     } />
                 <TextInput secureTextEntry
                     style={
@@ -65,14 +65,14 @@ export default function Login(props) {
                     autoCapitalize="none"
                     placeholder="Password"
                     onChangeText={
-                        password => this.setState({ password })
+                        password => setPassword(password)
                     }
                     value={
-                        this.state.password
+                        password
                     } />
                 <TouchableOpacity
                         style={styles.longButton}
-                        onPress={this.handleLogin}
+                        onPress={() => handleLogin()}
                     >
                         <Text style={styles.btnText}> Login </Text>
                 </TouchableOpacity>
@@ -85,7 +85,7 @@ export default function Login(props) {
             </View>
         )
     }
-}
+
 
 const styles = StyleSheet.create({
     container: {
