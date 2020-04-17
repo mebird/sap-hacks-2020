@@ -4,7 +4,7 @@ import { Button } from 'react-native-elements';
 import * as React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
-// import PlaceOrder from './PlaceOrder';
+import { render } from 'react-dom';
 
 function Item({ title }) {
     return (
@@ -14,50 +14,29 @@ function Item({ title }) {
     );
 }
 
-export default function DashboardScreen(props) {
+export default function PlaceOrder(props) {
+    
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.logo}>
-                <Text style={styles.titleLabel}>StaySafe</Text>
-                <Image
-                    style={styles.logoPicture}
-                    source={require('../assets/images/on-demand-deliveries-polaris.png')}
+            <View style={styles.fixToText}>
+                <Button
+                    title="+ Add item"
+                    titleStyle={{ color: '#2B3158' }}
+                    type="outline"
+                    buttonStyle={styles.addItem}
                 />
             </View>
 
-            <View style={styles.fixToText}>
+            <View style={styles.fixToText}> 
                 <Button
-                    title="PLACE ORDER"
+                    title="Back"
                     titleStyle={{ color: '#2B3158' }}
                     type="outline"
                     buttonStyle={styles.placeOrderBtn}
-                    onPress={() => props.navigation.push("PlaceOrder")}
-                />
-                <Button
-                    title="VIEW ORDER"
-                    buttonStyle={styles.viewOrderBtn}
-                    onPress={() => props.navigation.push("View Current Orders")}
+                    onPress={() => props.navigation.push("DashboardScreen")}
                 />
             </View>
-            <View style={styles.fixToText}>
-                <Button
-                    title="VIEW HISTORY"
-                    buttonStyle={styles.viewHistoryBtn}
-                    onPress={() => props.navigation.push("History")}
-                />
-                <Button
-                    title="NEED HELP?"
-                    buttonStyle={styles.needHelpBtn}
-                    onPress={() => alert('1')}
-                />
-            </View>
-            <View style={styles.fixToText}>
-                <Button
-                    title="LEADERBOARD"
-                    buttonStyle={styles.leaderboardBtn}
-                    onPress={() => props.navigation.push("Leaderboard")}
-                />
-            </View>
+
         </ScrollView>
     );
 }
@@ -96,9 +75,10 @@ const styles = StyleSheet.create({
         width: 180,
         marginHorizontal: 10,
     },
-    leaderboardBtn: {
-        backgroundColor: '#7F7A8F',
-        height: 100,
+    addItem: {
+        borderStartColor: '#2B3158',
+        borderStyle: 'dashed',
+        height: 50,
         width: 380,
         marginHorizontal: 10,
     },

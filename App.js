@@ -14,6 +14,7 @@ import Login from './screens/Login';
 import SignUp from './screens/SignUp';
 import Loading from './screens/Loading';
 import DashboardScreen from './screens/DashboardScreen';
+import PlaceOrder from './screens/PlaceOrder';
 
 
 const Stack = createStackNavigator();
@@ -74,7 +75,7 @@ function App(props) {
             <Stack.Screen name="Leaderboard" component={dummyDiv} />
             <Stack.Screen name="History" component={dummyDiv} />
             <Stack.Screen name="View Current Orders" component={dummyDiv} />
-            <Stack.Screen name="Place an Order" component={dummyDiv} />
+            <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
