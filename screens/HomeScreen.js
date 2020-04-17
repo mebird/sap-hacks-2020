@@ -4,6 +4,7 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } fro
 import { ScrollView } from 'react-native-gesture-handler';
 import { MonoText } from '../components/StyledText';
 import { ClientGroceryList } from "../components/GroceryList";
+import UploadImage from "../components/UploadImage";
 import fireDb from '../firebasedb';
 import populate from '../populate';
 
@@ -63,6 +64,7 @@ export default function HomeScreen() {
             Change any of the text, save the file, and your app will automatically reload.
             <Button title={"Populate the database!"} onPress={() => populate()}>Populate the db</Button>
           </Text>
+          <UploadImage />
           <br />
           <Text style={styles.getStartedText}>
             {orders ? mapOrders() : 'Searching Orders'}
