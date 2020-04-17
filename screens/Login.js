@@ -29,7 +29,6 @@ export default function Login(props) {
                     source={require('../assets/images/on-demand-deliveries-polaris.png')}
                 />
             </View>
-                <Text>Login</Text>
             {
                 errMsg && <Text style={
                     { color: 'red' }
@@ -38,6 +37,7 @@ export default function Login(props) {
                         errMsg
                     } </Text>
             }
+            <Text styles={styles.hintText}> Email </Text>
             <TextInput style={
                 styles.textInput
             }
@@ -45,6 +45,7 @@ export default function Login(props) {
                 placeholder="Email"
                 onChangeText={setEmail}
                 value={email} />
+            <Text styles={styles.hintText}> Password </Text>
             <TextInput secureTextEntry
                 style={
                     styles.textInput
@@ -100,6 +101,7 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
     textInput: {
+        paddingHorizontal: 10,
         height: 40,
         width: '90%',
         borderColor: 'gray',
