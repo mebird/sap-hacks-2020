@@ -5,7 +5,7 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { useStoreActions } from 'easy-peasy';
 
-export default function UploadImage() {
+export default function UploadImage(props) {
   const setUri = useStoreActions(s => s.setImageUri);
 
   React.useEffect(() => {
@@ -38,33 +38,26 @@ export default function UploadImage() {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.longButton} onPress={() => pickImage()}>
+      <TouchableOpacity style={props.style} onPress={() => pickImage()}>
         <Text style={styles.btnText}>
           Pick an image
         </Text>
       </TouchableOpacity>
-    </View>
   );
 
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+  btnText: {
+      color: 'white',
   },
   longButton: {
     borderWidth: 1,
     borderRadius: 3,
     padding: 10,
     marginTop: 10,
+    marginBottom: 10,
     backgroundColor: '#2B3158',
-    width: '90%',
     alignItems: 'center'
   },
-  btnText: {
-      color: 'white',
-  }
 })

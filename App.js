@@ -1,17 +1,16 @@
 import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, Text } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {decode, encode} from 'base-64';
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 import { StoreProvider, createStore, action } from 'easy-peasy';
 
 import Login from './screens/Login';
-import Main from './screens/Main';
 import SignUp from './screens/SignUp';
 import Loading from './screens/Loading';
 import DashboardScreen from './screens/DashboardScreen';
@@ -21,11 +20,21 @@ import UserProfile from './screens/ProfileScreen';
 const Stack = createStackNavigator();
 
 function App(props) {
+  // DO NOT REMOVE
+  if (!global.btoa) {  global.btoa = encode }
+  if (!global.atob) { global.atob = decode } 
+  // OR ELSE LOGIN BREAKS
+
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
 
+  const dummyDiv = () => {
+    return  (
+      <Text>TODO</Text>
+    )
+  }
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
@@ -61,13 +70,12 @@ function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Signup" component={SignUp} />
+            <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
-            <Stack.Screen name="User Profile" component={UserProfile} />
-            <Stack.Screen name="Leaderboard" component={() => <div>TODO</div>} />
-            <Stack.Screen name="History" component={() => <div>TODO</div>} />
-            <Stack.Screen name="View Current Orders" component={() => <div>TODO</div>} />
-            <Stack.Screen name="Place an Order" component={() => <div>TODO</div>} />
+            <Stack.Screen name="Leaderboard" component={dummyDiv} />
+            <Stack.Screen name="History" component={dummyDiv} />
+            <Stack.Screen name="View Current Orders" component={dummyDiv} />
+            <Stack.Screen name="Place an Order" component={dummyDiv} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
