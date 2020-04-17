@@ -5,6 +5,8 @@ import TabBarIcon from '../components/TabBarIcon';
 import DashboardScreen from '../screens/DashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Login from '../screens/Login';
+import HomeScreen from '../screens/HomeScreen';
+import LinksScreen from '../screens/LinksScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -46,14 +48,5 @@ export default function BottomTabNavigator({ navigation, route }) {
 }
 
 function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-  console.log(routeName);
-  switch (routeName) {
-    case 'HomeScreen':
-      return 'HomeScreen';
-    case 'Login':
-      return 'Login';
-    case 'Profile':
-      return 'User Profile';
-  }
+  return route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 }

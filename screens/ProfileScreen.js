@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
     },
     history: {
         flex: 1,
-        // alignItems: 'center',
         width: '90%',
         marginBottom: 10,
     },
