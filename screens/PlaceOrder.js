@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     },
     overlay: {
         borderRadius: 3,
-        color: `#F2F3FA`
+        padding: 0
     },
     title: {},
 });
