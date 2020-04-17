@@ -8,7 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
-import { StoreProvider, createStore } from 'easy-peasy';
+import { StoreProvider, createStore, action } from 'easy-peasy';
 
 import Login from './screens/Login';
 import Main from './screens/Main';
@@ -17,7 +17,6 @@ import Loading from './screens/Loading';
 
 
 const Stack = createStackNavigator();
-const store = createStore({});
 
 function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -76,6 +75,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+});
+
+const staticUser = {
+  auth_image: "https://randomuser.me/api/portraits/thumb/men/24.jpg",
+  email: "andrew.hanson@example.com",
+  name: "Andrew Hanson",
+  karma: 100
+}
+
+const store = createStore({
+  user: staticUser,
+  changeUser: action((state, payload) => { state.user = payload; })
 });
 
 export default function AppWrapper(props) {

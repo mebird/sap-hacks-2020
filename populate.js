@@ -2,12 +2,12 @@ import firebase from "./firebasedb";
 
 async function generateUser() {
     const results = await fetch("https://randomuser.me/api/", { method: "GET" }).then(res => res.json());
-    const { name: { first, last }, location: { city }, email, login: { password }, phone, picture: { thumbnail } } = results.results[0];
+    const { name: { first, last }, location: { city }, email, login: { password }, phone, picture: { large } } = results.results[0];
     return await firebase.addUser({
         name: `${first} ${last}`,
         location: city,
         phonenumber: phone,
-        auth_image: thumbnail,
+        auth_image: large,
         email,
         password
     });
