@@ -1,9 +1,10 @@
 import { Button, Overlay } from 'react-native-elements';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TextInput } from 'react-native';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { useStoreState } from 'easy-peasy';
 import AddItemScreen from './AddItemScreen';
+import fireDb from '../firebasedb';
 
 function Item({ uuid, price, quantity }) {
     return (
@@ -21,7 +22,13 @@ function Item({ uuid, price, quantity }) {
 export default function PlaceOrder(props) {
     const { items } = useStoreState(s => s.myOrder);
     const [popover, setPopover] = useState(false);
+    const [store, setStore] = useState();
+    const { user: { karma = 0, name, auth_image, email } } = useStoreState(state => state || { user: {} });
 
+    const submitOrder = async () => {
+        await fireDb.addOrder(items, store, email, 'low');
+        props.navigation.push("Root")
+    }
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.fixToText}>
@@ -33,6 +40,12 @@ export default function PlaceOrder(props) {
                     onPress={() => setPopover(p => !p)}
                 />
             </View>
+                <TextInput 
+                    style={styles.textInput}
+                    autoCapitalize="none"
+                    placeholder="Enter the store"
+                    onChangeText={setStore}
+                    value={store} />
             <View style={styles.items}>
                 <FlatList
                     data={items}
@@ -50,10 +63,18 @@ export default function PlaceOrder(props) {
                     titleStyle={{ color: '#2B3158' }}
                     type="outline"
                     buttonStyle={styles.placeOrderBtn}
-                    onPress={() => props.navigation.push("Dashboard")}
+                    onPress={() => props.navigation.push("Root")}
                 />
             </View>
-
+            <View style={styles.fixToText}>
+                <Button
+                    title="Submit"
+                    titleStyle={{ color: '#2B3158' }}
+                    type="outline"
+                    buttonStyle={styles.placeOrderBtn}
+                    onPress={() => submitOrder()}
+                />
+            </View>
         </ScrollView>
     );
 }
@@ -138,5 +159,13 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '90%',
         marginBottom: 10,
+    },
+    textInput: {
+        paddingHorizontal: 10,
+        height: 40,
+        width: '90%',
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginTop: 8
     },
 });

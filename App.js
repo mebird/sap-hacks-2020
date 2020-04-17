@@ -20,8 +20,9 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import ViewHistoryScreen from './screens/ViewHistoryScreen';
 import PickupOrder from './screens/PickupOrder';
 import YourJobs from './screens/YourJobs';
+import PlaceOrder from './screens/PlaceOrder';
 
-
+console.disableYellowBox = true;
 const Stack = createStackNavigator();
 
 function App(props) {
@@ -82,7 +83,7 @@ function App(props) {
             <Stack.Screen name="Leaderboard" component={dummyDiv} />
             <Stack.Screen name="View History" component={ViewHistoryScreen} />
             <Stack.Screen name="View Current Orders" component={ViewOrderScreen} />
-            <Stack.Screen name="Place an Order" component={dummyDiv} />
+            <Stack.Screen name="Place Order" component={PlaceOrder} />
             <Stack.Screen name="Pickup an Order" component={PickupOrder} />
             <Stack.Screen name="Your Jobs" component={YourJobs} />
             <Stack.Screen name="Loading" component={Loading} />
