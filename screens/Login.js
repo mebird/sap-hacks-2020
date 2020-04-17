@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as firebase from "firebase/app";
 import {
     StyleSheet,
@@ -7,40 +7,47 @@ import {
     View,
     TouchableOpacity
 } from 'react-native'
-export default class Login extends React.Component {
-    state = {
-        email: '',
-        password: '',
-        errorMessage: null
-    }
-    handleLogin = () => {
-        const { email, password } = this.state;
+import fireDb from "../firebasedb";
+import { useStoreActions } from 'easy-peasy';
+
+export default function Login(props) {
+    const setUserSession = useStoreActions(state => state.changeUser);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errMsg, setErrMsg] = useState(null);
+
+    const handleLogin = () => {
         firebase
             .auth()
-            .signInWithEmailAndPassword(email, password).then(() =>
-                this
-                    .props
-                    .navigation
-                    .navigate('Main'))
-            .catch(error =>
-                this.setState({ errorMessage: error.message })
-            )
+            .signInWithEmailAndPassword(email, password)
+            .then(() => fireDb.getUser(email))
+            .then(usr => setUserSession(usr))
+            .then(() => props.navigation.push('Main'))
+            .catch(error => setErrMsg(error.message))
     }
-    render() {
-        return (
-            <View style={
-                styles.container
-            }>
-                <Text>Login</Text>
-                {
-                    this.state.errorMessage && <Text style={
-                        { color: 'red' }
-                    }>
-                        {
-                            this.state.errorMessage
-                        } </Text>
-                }
-                <TextInput style={
+
+    return (
+        <View style={
+            styles.container
+        }>
+            <Text>Login</Text>
+            {
+                errMsg && <Text style={
+                    { color: 'red' }
+                }>
+                    {
+                        errMsg
+                    } </Text>
+            }
+            <TextInput style={
+                styles.textInput
+            }
+                autoCapitalize="none"
+                placeholder="Email"
+                onChangeText={setEmail}
+                value={email} />
+            <TextInput secureTextEntry
+                style={
                     styles.textInput
                 }
                     autoCapitalize="none"
@@ -79,6 +86,7 @@ export default class Login extends React.Component {
         )
     }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
