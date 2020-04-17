@@ -3,6 +3,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useStoreState } from 'easy-peasy';
+import { fireDb } from '../firebasedb';
 
 function Item({ title }) {
     return (
@@ -19,6 +20,7 @@ export default function ProfileScreen() {
         { title: 'Shoppers Drug Mart' },
         { title: 'Whole Foods Market' },
     ];
+    // const rctHistory = fireDb.
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.profile}>
