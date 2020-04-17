@@ -45,9 +45,9 @@ export default function DashboardScreen(props) {
                     onPress={() => props.navigation.push("History")}
                 />
                 <Button
-                    title="NEED HELP?"
+                    title="USER PROFILE"
                     buttonStyle={styles.needHelpBtn}
-                    onPress={() => alert('1')}
+                    onPress={() => props.navigation.push("User Profile")}
                 />
             </View>
             <View style={styles.fixToText}>

@@ -22,25 +22,25 @@ export default function BottomTabNavigator({ navigation, route }) {
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={{ showLabel: false }}>
       <BottomTab.Screen
         name="Place Order"
-        component={ProfileScreen}
+        component={AddItemScreen}
         options={{
           title: 'Place Order',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="user" />,
         }}
       />
       <BottomTab.Screen
-        name="Dashboard"
-        component={Dashboard}
+        name="Explore"
+        component={HomeScreen}
         options={{
-          title: 'Dashboard',
+          title: 'Explore',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="appstore-o" />,
         }}
       />
       <BottomTab.Screen
-        name="Login"
-        component={Login}
+        name="Leaderboard"
+        component={LinksScreen}
         options={{
-          title: 'Login',
+          title: 'Leaderboard',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="profile" />,
         }}
       />
