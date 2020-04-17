@@ -1,7 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, ForceTouchGestureHandler } from 'react-native-gesture-handler';
 import { useStoreState } from 'easy-peasy';
 import fireDb from '../firebasedb';
 
@@ -13,7 +12,7 @@ function Item({ title }) {
     );
 }
 
-export default function ProfileScreen() {
+export default function ViewHistoryScreen() {
     const { user: { karma = 0, name, auth_image, email } } = useStoreState(state => state || { user: {} });
     const [recentHistory, setRecentHistory] = React.useState();
 
@@ -21,7 +20,7 @@ export default function ProfileScreen() {
         const getRctHistory = async () => {
             try {
                 const history = await fireDb.getOrders(email);
-                setRecentHistory(history);
+                setRecentHistory(history.filter(order => order.clientConf && order.delivererConf));
             } catch (err) {
                 alert(err);
             }
@@ -42,18 +41,10 @@ export default function ProfileScreen() {
                 <FlatList
                     data={recentHistory}
                     contentContainerStyle={styles.historyList}
-                    renderItem={({ item }) => <Item title={item.location + " for total of: $" + item.total} />}
+                    renderItem={({ item }) => <Item title={item.deliverer + " delievered " + item.groceries.map(food => `${food.uuid}  x${food.quantity} for a total of: $ + ${item.total}`)} />}
                     keyExtractor={(item, i) => `${i}`}
-                    ListHeaderComponent={<Text style={{ fontWeight: 'bold' }}>Recent History</Text>}
+                    ListHeaderComponent={<Text style={{ fontWeight: 'bold' }}>Ongoing Orders</Text>}
                 />
-            </View>
-            <View style={styles.summary}>
-                <Text style={{ fontWeight: 'bold' }}>Summary</Text>
-                <Text>Hello, my name is {name} and I'm happy to be part of this community. 
-                The recent COVID outbreak has really gotten the best of my mobility. This app is a blessing,
-                The recent COVID outbreak has really gotten the best of my mobility. This app is a blessing,
-                thank you so much devs! You are doing a wonderful job. I would rate the app 10 stars if I could.
-                </Text>
             </View>
         </ScrollView>
     );

@@ -34,21 +34,21 @@ export default function DashboardScreen(props) {
                     onPress={() => props.navigation.push("Place Order")}
                 />
                 <Button
-                    title="VIEW ORDER"
+                    title="PICKUP ORDER"
                     buttonStyle={styles.viewOrderBtn}
-                    onPress={() => props.navigation.push("View Current Orders")}
+                    onPress={() => props.navigation.push("Pickup an Order")}
                 />
             </View>
             <View style={styles.fixToText}>
                 <Button
                     title="VIEW HISTORY"
                     buttonStyle={styles.viewHistoryBtn}
-                    onPress={() => props.navigation.push("History")}
+                    onPress={() => props.navigation.push("View an History")}
                 />
                 <Button
-                    title="NEED HELP?"
+                    title="VIEW ORDER"
                     buttonStyle={styles.needHelpBtn}
-                    onPress={() => alert('1')}
+                    onPress={() => props.navigation.push("View Current Orders")}
                 />
             </View>
             <View style={styles.fixToText}>

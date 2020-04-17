@@ -14,7 +14,12 @@ import Login from './screens/Login';
 import SignUp from './screens/SignUp';
 import Loading from './screens/Loading';
 import DashboardScreen from './screens/DashboardScreen';
-import PlaceOrder from './screens/PlaceOrder';
+import ProfileScreen from './screens/ProfileScreen';
+import ViewOrderScreen from './screens/ViewOrderScreen';
+import BottomTabNavigator from './navigation/BottomTabNavigator';
+import ViewHistoryScreen from './screens/ViewHistoryScreen';
+import PickupOrder from './screens/PickupOrder';
+import YourJobs from './screens/YourJobs';
 
 
 const Stack = createStackNavigator();
@@ -71,11 +76,15 @@ function App(props) {
           <Stack.Navigator>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="User Profile" component={ProfileScreen} />
             <Stack.Screen name="Leaderboard" component={dummyDiv} />
-            <Stack.Screen name="History" component={dummyDiv} />
-            <Stack.Screen name="View Current Orders" component={dummyDiv} />
-            <Stack.Screen name="Place Order" component={PlaceOrder} />
+            <Stack.Screen name="View History" component={ViewHistoryScreen} />
+            <Stack.Screen name="View Current Orders" component={ViewOrderScreen} />
+            <Stack.Screen name="Place an Order" component={dummyDiv} />
+            <Stack.Screen name="Pickup an Order" component={PickupOrder} />
+            <Stack.Screen name="Your Jobs" component={YourJobs} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
@@ -101,6 +110,7 @@ const staticUser = {
 const store = createStore({
   user: staticUser,
   uri: '',
+  karma: 0,
   myOrder: {
     items: [],
     addItem: action((s, p) => { s.items.push(p) }),
@@ -108,6 +118,7 @@ const store = createStore({
   },
   changeUser: action((s, p) => { s.user = p }),
   setImageUri: action((s, p) => { s.uri = p }),
+  changeKarma: action((s, p) => { s.karma = p })
 });
 
 export default function AppWrapper(props) {
