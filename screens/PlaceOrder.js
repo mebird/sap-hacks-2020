@@ -1,12 +1,18 @@
 import { Button, Overlay } from 'react-native-elements';
 import React, { useState } from 'react';
+<<<<<<< HEAD
 import { StyleSheet, Text, View, TextInput } from 'react-native';
+=======
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+>>>>>>> 03d9f67a3362101b936159235edca3c7e0f76fa8
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import AddItemScreen from './AddItemScreen';
 import fireDb from '../firebasedb';
 
-function Item({ uuid, price, quantity }) {
+function Item({ item: { uuid, price, quantity } }) {
+    const { clearItem } = useStoreActions(s => s.myOrder);
+
     return (
         <View style={styles.item}>
             <View style={{ flex: 1 }}>
@@ -15,6 +21,9 @@ function Item({ uuid, price, quantity }) {
             <View style={{ flex: 1 }}>
                 <Text style={{ textAlign: 'right' }}>{`${quantity} x $${price}`}</Text>
             </View>
+            <TouchableOpacity style={styles.delete} onPress={() => clearItem({ uuid })}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>{`x`}</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -48,8 +57,9 @@ export default function PlaceOrder(props) {
                     value={store} />
             <View style={styles.items}>
                 <FlatList
+                    key={items.length}
                     data={items}
-                    renderItem={({ item }) => Item(item)}
+                    renderItem={({ item }) => <Item item={item} />}
                     keyExtractor={(item, i) => `${i}`} />
             </View>
 
@@ -160,6 +170,7 @@ const styles = StyleSheet.create({
         width: '90%',
         marginBottom: 10,
     },
+<<<<<<< HEAD
     textInput: {
         paddingHorizontal: 10,
         height: 40,
@@ -168,4 +179,17 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginTop: 8
     },
+=======
+    delete: {
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: 'transparent',
+        width: 20,
+        textAlign: 'center',
+        color: 'white',
+        backgroundColor: 'red',
+        alignSelf: 'flex-end',
+        marginLeft: 10
+    }
+>>>>>>> 03d9f67a3362101b936159235edca3c7e0f76fa8
 });
