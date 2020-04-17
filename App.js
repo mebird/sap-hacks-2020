@@ -24,8 +24,8 @@ function App(props) {
   // DO NOT REMOVE
   if (!global.btoa) {  global.btoa = encode }
   if (!global.atob) { global.atob = decode } 
-  //
-  
+  // OR ELSE LOGIN BREAKS
+
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
@@ -33,7 +33,7 @@ function App(props) {
 
   const dummyDiv = () => {
     return  (
-      <div>TODO</div>
+      <Text>TODO</Text>
     )
   }
   // Load any resources or data that we need prior to rendering the app
