@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, FlatList } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { useStoreState } from 'easy-peasy';
 
 function Item({ title }) {
     return (
@@ -13,6 +13,7 @@ function Item({ title }) {
 }
 
 export default function ProfileScreen() {
+    const { user: { karma = 0, name, auth_image } } = useStoreState(state => state || { user: {} });
     const recentHistory = [
         { title: 'Save on Foods' },
         { title: 'Shoppers Drug Mart' },
@@ -23,17 +24,15 @@ export default function ProfileScreen() {
             <View style={styles.profile}>
                 <Image
                     style={styles.profilePicture}
-                    source={{
-                        uri: 'https://i.pinimg.com/originals/9f/10/f6/9f10f61ab04adb749c4b762b6e543c26.jpg'
-                    }}
+                    source={{ uri: auth_image }}
                 />
-                <Text style={styles.userName}>John Doe</Text>
-                <Text style={styles.text}>Karma 100</Text>
-                <Text style={styles.text}>Joined StaySafe 8 months ago</Text>
+                <Text style={styles.userName}>{name}</Text>
+                <Text style={styles.text}>Karma {karma}</Text>
             </View>
             <View style={styles.history}>
                 <FlatList
                     data={recentHistory}
+                    contentContainerStyle={styles.historyList}
                     renderItem={({ item }) => <Item title={item.title} />}
                     keyExtractor={(item, i) => `${i}`}
                     ListHeaderComponent={<Text style={{ fontWeight: 'bold' }}>Recent History</Text>}
@@ -62,7 +61,6 @@ const styles = StyleSheet.create({
     },
     history: {
         flex: 1,
-        // alignItems: 'center',
         width: '90%',
         marginBottom: 10,
     },
