@@ -4,6 +4,7 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react
 import { ScrollView } from 'react-native-gesture-handler';
 import { MonoText } from '../components/StyledText';
 import { ClientGroceryList } from "../components/GroceryList";
+import UploadImage from "../components/UploadImage";
 import fireDb from '../firebasedb';
 
 export default function HomeScreen() {
@@ -61,6 +62,7 @@ export default function HomeScreen() {
           <Text style={styles.getStartedText}>
             Change any of the text, save the file, and your app will automatically reload.
           </Text>
+          <UploadImage />
           <br />
           <Text style={styles.getStartedText}>
             {orders ? mapOrders() : 'Searching Orders'}
