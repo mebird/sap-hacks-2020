@@ -71,6 +71,19 @@ const ordersWrapper = {
     } catch (err) {
       alert(err);
     }
+  },
+  claimOrder: async (orderId, userId) => {
+    try {
+      await db.collection("orders")
+        .doc(orderId)
+        .update('deliverer', userId);
+      const user = await baseWrapper.getItem("user", userId);
+      await db.collection("user")
+        .doc(userId)
+        .update('pickup_orders', [...user['pickup_orders'], orderId]);
+    } catch (err) {
+      alert(err);
+    }
   }
 };
 

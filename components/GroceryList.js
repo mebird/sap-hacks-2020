@@ -39,12 +39,10 @@ async function updateProducts(query, setProducts) {
     searchProducts(query)
         .then(res =>
             setProducts(products => {
-                console.log(res);
-                let newProducts = { ...products };
                 res.forEach(p => {
-                    if (!newProducts.has(p.uuid)) newProducts.set(p.uuid, p);
+                    if (!products[p.uuid]) products[p.uuid] = p;
                 });
-                return newProducts;
+                return products;
             }));
 }
 
