@@ -103,8 +103,8 @@ const store = createStore({
   uri: '',
   myOrder: {
     items: [],
-    addItem: action((s, p) => { s.order.push(p) }),
-    clearItem: action((s, p) => { s.prder = s.filter(i => i.uuid != p.uuid) }),
+    addItem: action((s, p) => { s.items.push(p) }),
+    clearItem: action((s, p) => { s.items = s.items.filter(i => i.uuid != p.uuid) }),
   },
   changeUser: action((s, p) => { s.user = p }),
   setImageUri: action((s, p) => { s.uri = p }),

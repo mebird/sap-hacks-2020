@@ -124,6 +124,7 @@ const ordersWrapper = {
 
 const groceriesWrapper = {
   getSuggestedGroceries: async (query) => {
+    query = query.toLowerCase();
     try {
       return await db
         .collection("grocery_items")

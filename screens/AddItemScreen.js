@@ -2,63 +2,86 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, FlatList, TextInput } from 'react-native';
 import fireDb from '../firebasedb';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { useStoreActions } from 'easy-peasy';
 
-function Item({ uuid, price, dashed }) {
+function Item({ item: { uuid, price }, dashed, setItem, selected }) {
+    const itemStyles = [styles.item, { borderStyle: (dashed && !selected) ? 'dashed' : 'inherit' }];
+    if (selected) itemStyles.push(styles.selected);
     return (
-        <View style={{ ...styles.item, borderStyle: dashed ? 'dashed' : 'inherit' }}>
+        <TouchableOpacity
+            style={itemStyles}
+            onPress={() => selected ? setItem(null) : setItem({ uuid, price })}>
             <View style={{ flex: 1 }}>
-                <Text>{uuid}</Text>
+                <Text style={{ color: (selected ? 'white' : 'black') }}>{uuid}</Text>
             </View>
             <View style={{ flex: 1 }}>
-                <Text style={{ textAlign: 'right' }}>{`$${price}`}</Text>
+                <Text style={{ textAlign: 'right', color: (selected ? 'white' : 'black') }}>{`$${price}`}</Text>
             </View>
-
-        </View>
+        </TouchableOpacity>
     );
 }
 
 export default function AddItemScreen(props) {
     const [name, setName] = useState('');
+    const [quantity, setQuantity] = useState(1);
     const [item, setItem] = useState(null);
     const [items, setItems] = useState([]);
-
-    console.log(JSON.stringify(items));
+    const { addItem } = useStoreActions(s => s.myOrder);
 
     useEffect(() => {
         (async () => setItems(await fireDb.getCollection('grocery_items')))();
     }, []);
-
-    const { addItem } = useStoreActions(s => s.myOrder);
-
     const onPress = () => {
-        if (item) addItem(item);
+        if (item) addItem({ ...item, quantity });
         props.onPress();
     }
 
     return (
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.items}>
-                <Text style={{ fontWeight: 'bold' }}>Add Item</Text>
+        <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+                <View style={styles.items}>
+                    <Text style={{ fontWeight: 'bold' }}>Add Item</Text>
+                    <TextInput
+                        placeholder="eggs"
+                        autoCapitalize="none"
+                        style={styles.textInput}
+                        onChangeText={async (text) => {
+                            setName(text);
+                            const suggestions = await fireDb.getSuggestedGroceries(text);
+                            if (item) suggestions.unshift(item);
+                            const filteredItems = suggestions.filter((v, i, a) => a.findIndex(t => (t.uuid === v.uuid)) === i);
+                            await setItems(filteredItems);
+                        }}
+                        value={name}
+                    />
+                    <FlatList
+                        data={items}
+                        renderItem={(i) =>
+                            <Item
+                                item={i.item}
+                                dashed
+                                setItem={setItem}
+                                selected={!!item && item.uuid === i.item.uuid} />}
+                        keyExtractor={(item, i) => `${i}`}
+                    />
+                </View>
+            </ScrollView >
+            <View style={styles.footer}>
                 <TextInput
-                    placeholder="eggs"
-                    autoCapitalize="none"
-                    style={styles.search}
-                    onChangeText={async (text) => {
-                        setName(text);
-                        await setItems(await fireDb.getSuggestedGroceries(text));
-                    }}
-                    value={name}
-                />
-                <FlatList
-                    data={items}
-                    renderItem={({ item }) => <Item {...item} dashed />}
-                    keyExtractor={(item, i) => `${i}`}
-                />
-                <Button title="Add Item" onPress={onPress} buttonStyle={styles.itemBtn} dashed />
+                    placeholder={"1"}
+                    style={{ ...styles.textInput, width: 80 }}
+                    keyboardType={"numberic"}
+                    onChangeText={t => setQuantity(Number(t))}
+                    value={`${quantity}`} />
+                <TouchableOpacity
+                    style={styles.submitBtn}
+                    onPress={onPress}
+                >
+                    <Text style={styles.btnText}> + </Text>
+                </TouchableOpacity>
             </View>
-        </ScrollView>
+        </View >
     );
 }
 
@@ -70,6 +93,16 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingTop: 15,
         alignItems: 'center'
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        flex: 1,
+        backgroundColor: '#F2F3FA',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
     },
     items: {
         flex: 1,
@@ -83,19 +116,32 @@ const styles = StyleSheet.create({
         marginTop: 10,
         flexDirection: 'row'
     },
-    search: {
+    selected: {
+        backgroundColor: '#FF5300',
+        color: 'white',
+        borderColor: 'transparent'
+    },
+    textInput: {
         borderColor: '#2B3158',
         height: 40,
         borderRadius: 3,
         borderWidth: 1,
         marginTop: 10,
-        paddingLeft: 8
+        paddingLeft: 10,
+        paddingRight: 8
     },
-    itemBtn: {
-        backgroundColor: '#F2F3FA',
-        borderColor: '#2B3158',
-        height: 50,
-        width: 180,
-        marginHorizontal: 10,
+    submitBtn: {
+        flex: 1,
+        borderWidth: 1,
+        borderRadius: 3,
+        padding: 10,
+        backgroundColor: '#2B3158',
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        margin: 10
     },
+    btnText: {
+        color: 'white',
+    }
 });

@@ -8,9 +8,12 @@ import AddItemScreen from './AddItemScreen';
 function Item({ uuid, price, quantity }) {
     return (
         <View style={styles.item}>
-            <Text style={styles.title}>{uuid}</Text>
-            <Text style={styles.title}>{price}</Text>
-            <Text style={styles.title}>{quantity}</Text>
+            <View style={{ flex: 1 }}>
+                <Text>{uuid}</Text>
+            </View>
+            <View style={{ flex: 1 }}>
+                <Text style={{ textAlign: 'right' }}>{`${quantity} x $${price}`}</Text>
+            </View>
         </View>
     );
 }
@@ -30,15 +33,16 @@ export default function PlaceOrder(props) {
                     onPress={() => setPopover(p => !p)}
                 />
             </View>
+            <View style={styles.items}>
+                <FlatList
+                    data={items}
+                    renderItem={({ item }) => Item(item)}
+                    keyExtractor={(item, i) => `${i}`} />
+            </View>
 
             <Overlay overlayStyle={styles.overlay} isVisible={popover}>
                 <AddItemScreen onPress={() => setPopover(p => !p)} />
             </Overlay>
-
-            <FlatList
-                data={items}
-                renderItem={({ item }) => Item(item)}
-                keyExtractor={(item, i) => `${i}`} />
 
             <View style={styles.fixToText}>
                 <Button
@@ -124,10 +128,15 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         padding: 10,
         marginTop: 10,
+        flexDirection: 'row'
     },
     overlay: {
         borderRadius: 3,
         padding: 0
     },
-    title: {},
+    items: {
+        flex: 1,
+        width: '90%',
+        marginBottom: 10,
+    },
 });
