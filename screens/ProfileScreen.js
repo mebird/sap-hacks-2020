@@ -12,7 +12,7 @@ function Item({ title }) {
 }
 
 export default function ProfileScreen() {
-    const { user: { karma = 0, name, auth_image } } = useStoreState(state => state.user || { user: {} });
+    const { user: { karma = 0, name, auth_image } } = useStoreState(state => state || { user: {} });
     const recentHistory = [
         { title: 'Save on Foods' },
         { title: 'Shoppers Drug Mart' },
