@@ -60,7 +60,7 @@ function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Signup" component={SignUp} />
+            <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
             <Stack.Screen name="Leaderboard" component={() => <div>TODO</div>} />
             <Stack.Screen name="History" component={() => <div>TODO</div>} />

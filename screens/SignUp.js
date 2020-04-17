@@ -79,7 +79,7 @@ export default function SignUp(props) {
             <Button title="Sign Up" onPress={() => handleSignUp()} />
             <Button
                 title="Already have an account? Login"
-                onPress={() => props.navigation.push('Login')}
+                onPress={() => props.navigation.navigate('Login')}
             />
         </View>
     )
