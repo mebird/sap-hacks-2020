@@ -5,6 +5,7 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import {decode, encode} from 'base-64';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
@@ -20,11 +21,21 @@ import DashboardScreen from './screens/DashboardScreen';
 const Stack = createStackNavigator();
 
 function App(props) {
+  // DO NOT REMOVE
+  if (!global.btoa) {  global.btoa = encode }
+  if (!global.atob) { global.atob = decode } 
+  //
+  
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
   const { getInitialState } = useLinking(containerRef);
 
+  const dummyDiv = () => {
+    return  (
+      <div>TODO</div>
+    )
+  }
   // Load any resources or data that we need prior to rendering the app
   React.useEffect(() => {
     async function loadResourcesAndDataAsync() {
@@ -62,10 +73,10 @@ function App(props) {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
-            <Stack.Screen name="Leaderboard" component={() => <div>TODO</div>} />
-            <Stack.Screen name="History" component={() => <div>TODO</div>} />
-            <Stack.Screen name="View Current Orders" component={() => <div>TODO</div>} />
-            <Stack.Screen name="Place an Order" component={() => <div>TODO</div>} />
+            <Stack.Screen name="Leaderboard" component={dummyDiv} />
+            <Stack.Screen name="History" component={dummyDiv} />
+            <Stack.Screen name="View Current Orders" component={dummyDiv} />
+            <Stack.Screen name="Place an Order" component={dummyDiv} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
