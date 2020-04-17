@@ -119,6 +119,15 @@ const ordersWrapper = {
     } catch (err) {
       alert(err);
     }
+  },
+  getOrders: async (email) => {
+    try {
+      const ordersRef = db.collection('orders');
+      const query = await ordersRef.where('client', '==', email).get();
+      return query.docs.map(doc => doc.data());
+    } catch (err) {
+      alert(err);
+    }
   }
 };
 
@@ -140,7 +149,7 @@ const groceriesWrapper = {
 }
 
 const usersWrapper = {
-  getUser: async (uuid) => await baseWrapper.getItem("user", uuid),
+  getUser: async  (uuid) => await baseWrapper.getItem("user", uuid),
   addUser: async (user) => {
     const { email, image_uri } = user;
     const record = await baseWrapper.getItem("user", email);

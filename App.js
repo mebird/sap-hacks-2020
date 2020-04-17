@@ -14,7 +14,7 @@ import Login from './screens/Login';
 import SignUp from './screens/SignUp';
 import Loading from './screens/Loading';
 import DashboardScreen from './screens/DashboardScreen';
-import UserProfile from './screens/ProfileScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 
 const Stack = createStackNavigator();
@@ -72,6 +72,7 @@ function App(props) {
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="User Profile" component={ProfileScreen} />
             <Stack.Screen name="Leaderboard" component={dummyDiv} />
             <Stack.Screen name="History" component={dummyDiv} />
             <Stack.Screen name="View Current Orders" component={dummyDiv} />

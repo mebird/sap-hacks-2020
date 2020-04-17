@@ -3,7 +3,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useStoreState } from 'easy-peasy';
-import { fireDb } from '../firebasedb';
+import fireDb from '../firebasedb';
 
 function Item({ title }) {
     return (
@@ -15,12 +15,15 @@ function Item({ title }) {
 
 export default function ProfileScreen() {
     const { user: { karma = 0, name, auth_image } } = useStoreState(state => state || { user: {} });
-    const recentHistory = [
-        { title: 'Save on Foods' },
-        { title: 'Shoppers Drug Mart' },
-        { title: 'Whole Foods Market' },
-    ];
-    // const rctHistory = fireDb.
+    const [recentHistory, setRecentHistory] = React.useState();
+
+    React.useEffect(() => {
+        const getRctHistory = async () => {
+            const history = await fireDb.getOrders('heigold128@gmail.com');
+            setRecentHistory(history);
+        }
+        getRctHistory()
+    },[])
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.profile}>
@@ -35,7 +38,7 @@ export default function ProfileScreen() {
                 <FlatList
                     data={recentHistory}
                     contentContainerStyle={styles.historyList}
-                    renderItem={({ item }) => <Item title={item.title} />}
+                    renderItem={({ item }) => <Item title={item.client} />}
                     keyExtractor={(item, i) => `${i}`}
                     ListHeaderComponent={<Text style={{ fontWeight: 'bold' }}>Recent History</Text>}
                 />
