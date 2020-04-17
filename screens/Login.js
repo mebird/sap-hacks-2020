@@ -50,25 +50,41 @@ export default function Login(props) {
                 style={
                     styles.textInput
                 }
-                autoCapitalize="none"
-                placeholder="Password"
-                onChangeText={setPassword}
-                value={password} />
-            <TouchableOpacity
-                style={styles.longButton}
-                onPress={() => handleLogin()}
-            >
-                <Text style={styles.btnText}> Login </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.longButton}
-                onPress={() => props.navigation.push('Signup')}
-            >
-                <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
+                    autoCapitalize="none"
+                    placeholder="Email"
+                    onChangeText={
+                        email => setEmail(email)
+                    }
+                    value={
+                        email
+                    } />
+                <TextInput secureTextEntry
+                    style={
+                        styles.textInput
+                    }
+                    autoCapitalize="none"
+                    placeholder="Password"
+                    onChangeText={
+                        password => setPassword(password)
+                    }
+                    value={
+                        password
+                    } />
+                <TouchableOpacity
+                        style={styles.longButton}
+                        onPress={() => handleLogin()}
+                    >
+                        <Text style={styles.btnText}> Login </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        style={styles.longButton}
+                        onPress={() => props.navigation.push('SignUp')}
+                    >
+                        <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 
 
 const styles = StyleSheet.create({
