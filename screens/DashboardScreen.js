@@ -35,14 +35,14 @@ export default function DashboardScreen(props) {
                 <Button
                     title="PICKUP ORDER"
                     buttonStyle={styles.viewOrderBtn}
-                    onPress={() => props.navigation.push("Pickup Order")}
+                    onPress={() => props.navigation.push("Pickup an Order")}
                 />
             </View>
             <View style={styles.fixToText}>
                 <Button
                     title="VIEW HISTORY"
                     buttonStyle={styles.viewHistoryBtn}
-                    onPress={() => props.navigation.push("View History")}
+                    onPress={() => props.navigation.push("View an History")}
                 />
                 <Button
                     title="VIEW ORDER"

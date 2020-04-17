@@ -8,7 +8,7 @@ export default function(containerRef) {
       Root: {
         path: 'root',
         screens: {
-          PlaceOrder: 'placeorder',
+          YourJobs: 'YourJobs',
           Explore: 'explore',
           UserProfile: 'profile',
         },

@@ -1,47 +1,47 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, ShadowPropTypesIOS } from 'react-native';
+import { ScrollView, ForceTouchGestureHandler } from 'react-native-gesture-handler';
 import { useStoreState } from 'easy-peasy';
 import fireDb from '../firebasedb';
+import { useNavigation } from '@react-navigation/native';
 
-function Item({ title }) {
+function Item({ title, item }) {
+    const { user: { karma = 0, name, auth_image, email } } = useStoreState(state => state || { user: {} });
+
+    const confirmPickup = () => {
+        fireDb.setObject('orders', item.id, { ...item.data(), deliverer: name, hasBegun: true});
+        navigation.push('Root');
+    }
+    const navigation = useNavigation();
+    
     return (
         <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
+            <TouchableOpacity onPress={() => confirmPickup()}>
+                <Text style={styles.title}>{title}</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
-export default function ViewOrderScreen() {
-    const { user: { karma = 0, name, auth_image, email } } = useStoreState(state => state || { user: {} });
-    const [recentHistory, setRecentHistory] = React.useState();
+export default function ViewHistoryScreen(props) {
+
+    const [orders, setOrders] = React.useState();
 
     React.useEffect(() => {
-        const getRctHistory = async () => {
-            try {
-                const history = await fireDb.getOrders(email);
-                setRecentHistory(history.filter(order => !order.clientConf || !order.delivererConf));
-            } catch (err) {
-                alert(err);
-            }
-        }
-        getRctHistory()
+       const getOrders = async () => {
+         let unfilledOrders = await fireDb.getCollectionWhole('orders');
+         setOrders(unfilledOrders.filter(order => !order.data().hasBegun));
+       }
+       getOrders();
     },[])
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.profile}>
-                <Image
-                    style={styles.profilePicture}
-                    source={{ uri: auth_image }}
-                />
-                <Text style={styles.userName}>{name}</Text>
-                <Text style={styles.text}>Karma {karma}</Text>
-            </View>
             <View style={styles.history}>
                 <FlatList
-                    data={recentHistory}
+                    data={orders}
                     contentContainerStyle={styles.historyList}
-                    renderItem={({ item }) => <Item title={`${item.deliverer} is delivering from ${item.location} for your order of: ` + item.groceries.map(food => `${food.uuid} x${food.quantity} `)} />}
+                    renderItem={({ item }) => <Item title={`${item.data().location} for ${item.data().client} (priority: ${item.data().priority})`} item={item} />}
                     keyExtractor={(item, i) => `${i}`}
                     ListHeaderComponent={<Text style={{ fontWeight: 'bold' }}>Ongoing Orders</Text>}
                 />

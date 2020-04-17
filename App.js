@@ -18,6 +18,8 @@ import ProfileScreen from './screens/ProfileScreen';
 import ViewOrderScreen from './screens/ViewOrderScreen';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import ViewHistoryScreen from './screens/ViewHistoryScreen';
+import PickupOrder from './screens/PickupOrder';
+import YourJobs from './screens/YourJobs';
 
 
 const Stack = createStackNavigator();
@@ -81,6 +83,8 @@ function App(props) {
             <Stack.Screen name="View History" component={ViewHistoryScreen} />
             <Stack.Screen name="View Current Orders" component={ViewOrderScreen} />
             <Stack.Screen name="Place an Order" component={dummyDiv} />
+            <Stack.Screen name="Pickup an Order" component={PickupOrder} />
+            <Stack.Screen name="Your Jobs" component={YourJobs} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
@@ -106,8 +110,10 @@ const staticUser = {
 const store = createStore({
   user: staticUser,
   uri: '',
+  karma: 0,
   changeUser: action((s, p) => { s.user = p }),
-  setImageUri: action((s, p) => { s.uri = p })
+  setImageUri: action((s, p) => { s.uri = p }),
+  changeKarma: action((s, p) => { s.karma = p })
 });
 
 export default function AppWrapper(props) {

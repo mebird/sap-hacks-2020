@@ -8,6 +8,7 @@ import Login from '../screens/Login';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import AddItemScreen from '../screens/AddItemScreen';
+import YourJobs from '../screens/YourJobs';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Explore';
@@ -21,10 +22,10 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={{ showLabel: false }}>
       <BottomTab.Screen
-        name="Place Order"
-        component={AddItemScreen}
+        name="Your Jobs"
+        component={YourJobs}
         options={{
-          title: 'Place Order',
+          title: 'Your Jobs',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="user" />,
         }}
       />

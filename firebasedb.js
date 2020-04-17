@@ -22,6 +22,16 @@ const baseWrapper = {
       alert(err);
     }
   },
+  getCollectionWhole: async (collection) => {
+    try {
+      const ref = db.collection(collection);
+      const data = await ref.get();
+      console.log(data.docs);
+      return data.docs;
+    } catch (err) {
+      alert(err);
+    }
+  },
   getItem: async (collection, id) => {
     try {
       return await (await db.collection(collection).doc(id).get()).data();
@@ -71,7 +81,7 @@ const baseWrapper = {
 }
 
 const ordersWrapper = {
-  addOrder: async (groceries, location, userId) => {
+  addOrder: async (groceries, location, userId, priority) => {
     try {
       const uuid = generateId();
 
@@ -82,6 +92,7 @@ const ordersWrapper = {
         delivererConf: false,
         hasBegun: false,
         location,
+        priority: priority,
         client: userId
       };
       console.log('Here')
@@ -132,7 +143,16 @@ const ordersWrapper = {
     } catch (err) {
       alert(err);
     }
-  }
+  },
+  getJobs: async (name) => {
+    try {
+      const ordersRef = db.collection('orders');
+      const query = await ordersRef.where('deliverer', '==', name).get();
+      return query.docs;
+    } catch (err) {
+      alert(err);
+    }
+  },
 };
 
 const groceriesWrapper = {
@@ -185,5 +205,8 @@ const fireDb = {
   ...baseWrapper
 }
 
+const obj = { quantity: 3, uuid: 'bayberries' }
+const arr = [obj];
+fireDb.addOrder(arr, 'Safeway', 'abc@gmail.com', 'high')
 export default fireDb;
 

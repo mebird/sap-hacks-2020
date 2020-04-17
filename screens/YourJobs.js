@@ -1,47 +1,57 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, TouchableOpacity, ShadowPropTypesIOS } from 'react-native';
 import { ScrollView, ForceTouchGestureHandler } from 'react-native-gesture-handler';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 import fireDb from '../firebasedb';
+import { useNavigation } from '@react-navigation/native';
 
-function Item({ title }) {
+function Item({ title, item }) {
+    const { user: { karma = 0, name, auth_image, email } } = useStoreState(state => state || { user: {} });
+    const addKarma = useStoreActions(state => state.changeKarma);
+
+    const confirmedDelivered = async() => {
+        try {
+            await fireDb.setObject('orders', item.id, { ...item.data(), deliveryConf: true});
+            alert('Thank you so much <3');
+            addKarma(karma + 5);
+            navigation.push('Root');
+        } catch (err) {
+            alert(err);
+        }
+    }
+    const navigation = useNavigation();
+    
     return (
         <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
+            <TouchableOpacity onPress={() => confirmedDelivered()}>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.title}>items: {item.data().groceries.map(item => `${item.uuid} x${item.quantity}`)}</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
-export default function ViewHistoryScreen() {
+export default function YourJobs() {
     const { user: { karma = 0, name, auth_image, email } } = useStoreState(state => state || { user: {} });
-    const [recentHistory, setRecentHistory] = React.useState();
+
+    const [jobs, setJobs] = React.useState();
 
     React.useEffect(() => {
-        const getRctHistory = async () => {
-            try {
-                const history = await fireDb.getOrders(email);
-                setRecentHistory(history.filter(order => order.clientConf && order.delivererConf));
-            } catch (err) {
-                alert(err);
-            }
-        }
-        getRctHistory()
+       const getJobs = async () => {
+         let yourJobs = await fireDb.getJobs(name);
+         yourJobs = yourJobs.filter(doc => !doc.data().deliveryConf);
+         setJobs(yourJobs);
+       }
+       getJobs();
     },[])
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-            <View style={styles.profile}>
-                <Image
-                    style={styles.profilePicture}
-                    source={{ uri: auth_image }}
-                />
-                <Text style={styles.userName}>{name}</Text>
-                <Text style={styles.text}>Karma {karma}</Text>
-            </View>
             <View style={styles.history}>
                 <FlatList
-                    data={recentHistory}
+                    data={jobs}
                     contentContainerStyle={styles.historyList}
-                    renderItem={({ item }) => <Item title={item.deliverer + " delievered " + item.groceries.map(food => `${food.uuid}  x${food.quantity} for a total of: $ + ${item.total}`)} />}
+                    renderItem={({ item }) => <Item title={`${item.data().location} for ${item.data().client} (priority: ${item.data().priority})`} item={item} />}
                     keyExtractor={(item, i) => `${i}`}
                     ListHeaderComponent={<Text style={{ fontWeight: 'bold' }}>Ongoing Orders</Text>}
                 />
