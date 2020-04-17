@@ -8,10 +8,18 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
+import { StoreProvider, createStore, action } from 'easy-peasy';
+
+import Login from './screens/Login';
+import Main from './screens/Main';
+import SignUp from './screens/SignUp';
+import Loading from './screens/Loading';
+import DashboardScreen from './screens/DashboardScreen';
+
 
 const Stack = createStackNavigator();
 
-export default function App(props) {
+function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
   const containerRef = React.useRef();
@@ -52,6 +60,14 @@ export default function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Signup" component={SignUp} />
+            <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="Leaderboard" component={() => <div>TODO</div>} />
+            <Stack.Screen name="History" component={() => <div>TODO</div>} />
+            <Stack.Screen name="View Current Orders" component={() => <div>TODO</div>} />
+            <Stack.Screen name="Place an Order" component={() => <div>TODO</div>} />
+            <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
@@ -65,3 +81,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+const staticUser = {
+  auth_image: "https://randomuser.me/api/portraits/thumb/men/24.jpg",
+  email: "andrew.hanson@example.com",
+  name: "Andrew Hanson",
+  karma: 100
+}
+
+const store = createStore({
+  user: staticUser,
+  uri: '',
+  changeUser: action((s, p) => { s.user = p }),
+  setImageUri: action((s, p) => { s.uri = p })
+});
+
+export default function AppWrapper(props) {
+  return (
+    <StoreProvider store={store}>
+      {App(props)}
+    </StoreProvider>
+  );
+}

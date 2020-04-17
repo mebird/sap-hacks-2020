@@ -13,7 +13,7 @@ function Item({ title }) {
     );
 }
 
-export default function DashboardScreen() {
+export default function DashboardScreen(props) {
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.logo}>
@@ -23,38 +23,38 @@ export default function DashboardScreen() {
                     source={require('../assets/images/on-demand-deliveries-polaris.png')}
                 />
             </View>
-            
+
             <View style={styles.fixToText}>
                 <Button
                     title="PLACE ORDER"
-                    titleStyle={{ color: '#2B3158'}}
+                    titleStyle={{ color: '#2B3158' }}
                     type="outline"
                     buttonStyle={styles.placeOrderBtn}
-                    onPress={() => Alert.alert('1')}
+                    onPress={() => props.navigation.push("Place an Order")}
                 />
                 <Button
                     title="VIEW ORDER"
                     buttonStyle={styles.viewOrderBtn}
-                    onPress={() => Alert.alert('1')}
+                    onPress={() => props.navigation.push("View Current Orders")}
                 />
             </View>
             <View style={styles.fixToText}>
                 <Button
                     title="VIEW HISTORY"
                     buttonStyle={styles.viewHistoryBtn}
-                    onPress={() => Alert.alert('1')}
+                    onPress={() => props.navigation.push("History")}
                 />
                 <Button
                     title="NEED HELP?"
                     buttonStyle={styles.needHelpBtn}
-                    onPress={() => Alert.alert('1')}
+                    onPress={() => alert('1')}
                 />
             </View>
             <View style={styles.fixToText}>
                 <Button
                     title="LEADERBOARD"
                     buttonStyle={styles.leaderboardBtn}
-                    onPress={() => navigation}
+                    onPress={() => props.navigation.push("Leaderboard")}
                 />
             </View>
         </ScrollView>

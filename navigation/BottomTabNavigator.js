@@ -26,10 +26,10 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Dashboard"
+        name="Explore"
         component={DashboardScreen}
         options={{
-          title: 'Dashboard',
+          title: 'Explore',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="appstore-o" />,
         }}
       />
@@ -46,5 +46,13 @@ export default function BottomTabNavigator({ navigation, route }) {
 }
 
 function getHeaderTitle(route) {
-  return route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME; 
+  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+  switch (routeName) {
+    case 'Home':
+      return 'How to get started';
+    case 'Links':
+      return 'Links to learn more';
+    case 'Profile':
+      return 'User Profile';
+  }
 }
