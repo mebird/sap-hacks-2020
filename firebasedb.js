@@ -1,11 +1,16 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 import firebaseConfig from './firebase.config.js'
 
-firebase.initializeApp(firebaseConfig);
-
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 const db = firebase.firestore();
+const storage = firebase.storage();
+
+const storageRef = storage.ref();
 
 const baseWrapper = {
   getCollection: async (collection) => {
@@ -37,6 +42,36 @@ const baseWrapper = {
       alert(err);
     }
   },
+  uploadImage: async (fileRef, filename) => {
+    try {
+      const uploadTask = storageRef
+        .child('images/' + filename)
+        .putString(fileRef, 'data_url');
+  
+      uploadTask.on('state_changed', (snapshot) => {
+        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING:
+            console.log('Upload is running');
+            break;
+        }
+      }, (err) => {
+        alert(err)
+      }, () => {
+        console.log('Upload is finished');
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          console.log('File available at', downloadURL);
+        });
+        // Maja is going to update user auth url here
+      });
+    } catch (err) {
+      alert(err);
+    }
+  }
 }
 
 const ordersWrapper = {
