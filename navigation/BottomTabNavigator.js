@@ -3,7 +3,9 @@ import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import LinksScreen from '../screens/LinksScreen';
+import AddItemScreen from '../screens/AddItemScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -15,21 +17,29 @@ export default function BottomTabNavigator({ navigation, route }) {
   navigation.setOptions({ headerTitle: getHeaderTitle(route) });
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={{ showLabel: false }}>
       <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Place Order"
+        component={AddItemScreen}
         options={{
-          title: 'Get Started',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          title: 'Place Order',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="user" />,
         }}
       />
       <BottomTab.Screen
-        name="Links"
+        name="Explore"
+        component={HomeScreen}
+        options={{
+          title: 'Explore',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="appstore-o" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Leaderboard"
         component={LinksScreen}
         options={{
-          title: 'Resources',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+          title: 'Leaderboard',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="profile" />,
         }}
       />
     </BottomTab.Navigator>
@@ -37,12 +47,5 @@ export default function BottomTabNavigator({ navigation, route }) {
 }
 
 function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
-  switch (routeName) {
-    case 'Home':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
-  }
+  return route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 }
