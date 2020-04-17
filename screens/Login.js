@@ -22,7 +22,7 @@ export default function Login(props) {
             .signInWithEmailAndPassword(email, password)
             .then(() => fireDb.getUser(email))
             .then(usr => setUserSession(usr))
-            .then(() => props.navigation.push('Main'))
+            .then(() => props.navigation.push('Dashboard'))
             .catch(error => setErrMsg(error.message))
     }
 
