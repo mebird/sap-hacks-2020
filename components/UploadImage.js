@@ -4,7 +4,6 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import { useStoreActions } from 'easy-peasy';
-import { fireDb } from '../firebasedb'
 
 export default function UploadImage(props) {
   const setUri = useStoreActions(s => s.setImageUri);
@@ -31,7 +30,6 @@ export default function UploadImage(props) {
       });
       if (!result.cancelled) {
         setUri(result.uri);
-        fireDb.uploadImage(result.uri);
       }
       console.log(result);
     } catch (err) {

@@ -20,6 +20,7 @@ export default function SignUp(props) {
         if (!Object.values(user).reduce((prev, curr) => prev && !!curr)) {
             setErrorMsg('Please fill out all fields below.');
         } else {
+            fireDb.uploadImage(image_uri);
             firebase
                 .auth()
                 .createUserWithEmailAndPassword(email, password)
@@ -27,7 +28,7 @@ export default function SignUp(props) {
                 .then(() => fireDb.getUser(email))
                 .then(usr => setUserSession(usr))
                 .then(() => props.navigation.push('Main'))
-                .catch(error => setErrorMsg(error.message))
+                .catch(error => setErrorMsg(error.message));
         }
     }
 
@@ -75,10 +76,10 @@ export default function SignUp(props) {
                 value={password}
             />
             <UploadImage style={styles.longButton}/>
-            <Button title="Sign Up" onPress={handleSignUp} />
+            <Button title="Sign Up" onPress={() => handleSignUp()} />
             <Button
                 title="Already have an account? Login"
-                onPress={() => props.navigation.navigate('Login')}
+                onPress={() => props.navigation.push('Login')}
             />
         </View>
     )
