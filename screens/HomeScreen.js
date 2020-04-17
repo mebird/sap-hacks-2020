@@ -2,11 +2,38 @@ import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
 import { MonoText } from '../components/StyledText';
-import { ClientGroceryList } from '../components/GroceryList';
+import { ClientGroceryList } from "../components/GroceryList";
+import fireDb from '../firebasedb';
 
 export default function HomeScreen() {
+
+  const [orders, setOrders] = React.useState();
+
+  const mapOrders = () => {
+    return orders.map(order =>
+      <div key={order.client}>
+        <Text> e.g. List of orders </Text>
+        <br />
+        <Text> Client: {order.client}  </Text>
+        <br />
+        <Text> Location: {order.location} </Text>
+        <br />
+        <Text> Delivery Person: {order.deliverer} </Text>
+      </div>
+    )
+  };
+  // Get firebase orders
+  React.useEffect(() => {
+    const getOrders = async () => {
+      try {
+        setOrders(await fireDb.getCollection('orders'));
+      } catch (err) {
+        alert(err);
+      }
+    }
+    getOrders();
+  }, []);
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -34,6 +61,10 @@ export default function HomeScreen() {
           <Text style={styles.getStartedText}>
             Change any of the text, save the file, and your app will automatically reload.
           </Text>
+          <br />
+          <Text style={styles.getStartedText}>
+            {orders ? mapOrders() : 'Searching Orders'}
+          </Text>
         </View>
 
         <View style={styles.helpContainer}>
@@ -47,7 +78,8 @@ export default function HomeScreen() {
         <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
 
         <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
+          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator</MonoText>
+
         </View>
       </View>
     </View>

@@ -1,62 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { CheckBox } from 'react-native';
+import firebase from '../firebasedb';
 
 function GroceryItem(props) {
-    let { id, price = 0, images = [], title, onChange, quantity = 0, checked = false } = props;
+    let { uuid, onChange, quantity = 0, checked = false, viewMode = false } = props;
     return <CheckBox
-        key={id}
-        id
-        title
+        key={uuid}
+        id={uuid}
+        disabled={viewMode}
         checked
-        onClick={() => {
+        onPress={() => {
             checked = !checked;
-            onChange({ id, price, checked, quantity });
+            onChange({ uuid, checked, quantity });
         }} />
 }
 
-export function ClientGroceryList() {
-    const [products, setProducts] = useState({ 1234: { id: 1234, title: "Test" } });
+export function ClientGroceryList(props) {
+    const { groceries = [], viewMode } = props;
+    const [products, setProducts] = useState(groceries.reduce((prev, curr) => ({ ...prev, [curr[uuid]]: curr }), {}));
+
+    // Handle the order creation
     const onSubmit = () => {
         const selectedProducts = Object.values(products).filter(p => p.checked);
         console.log(selectedProducts);
     };
-    const onChange = ({ id, price, checked, quantity }) => setProducts(products => ({ ...products, [id]: { ...products[id], price, checked, quantity } }));
+
+    const onChange = ({ uuid, checked, quantity }) => setProducts(products => ({ ...products, [uuid]: { ...products[uuid], checked, quantity } }));
+
+    // Attach updateProducts to the search header
     useEffect(() => { updateProducts("eggs", setProducts) }, []);
 
     return <div>
-        {Object.values(products).map(p => GroceryItem({ ...p, onChange }))}
+        {Object.values(products).map(p => GroceryItem({ ...p, onChange, viewMode }))}
     </div>;
 }
-
-const apiKey = '';
-const baseUrl = 'https://api.spoonacular.com';
 
 async function updateProducts(query, setProducts) {
     searchProducts(query)
         .then(res => setProducts(products => {
             let newProducts = { ...products };
             res.forEach(p => {
-                if (!newProducts.has(p.id)) newProducts.set(id, p);
+                if (!newProducts.has(p.uuid)) newProducts.set(p.uuid, p);
             });
             return newProducts;
         }));
 }
 
-async function searchProducts(query, exclude = []) {
-    const qs = getQueryString({ apiKey, query });
-    return fetch(`${baseUrl}/food/products/search?${qs}`, { method: 'GET' })
-        .then(res => res.json())
-        .then(({ products = [] }) => Promise.all(products.map(p => getInfo(p))));
-}
-
-async function getInfo(product) {
-    const qs = getQueryString({ apiKey });
-    return fetch(`${baseUrl}/food/products/${product.id}?${qs}`, { method: 'GET' })
-        .then(res => res.json());
-}
-
-function getQueryString(obj) {
-    return Object.keys(obj)
-        .reduce((result, key) => [...result, `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`], [])
-        .join('&');
+async function searchProducts(query) {
+    return await firebase.getSuggestedGroceries(query);
 }
