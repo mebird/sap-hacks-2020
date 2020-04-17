@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as firebase from "firebase/app";
-import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native'
 import fireDb from "../firebasedb";
 import UploadImage from '../components/UploadImage';
 import { useStoreState, useStoreActions } from 'easy-peasy';
@@ -74,7 +74,7 @@ export default function SignUp(props) {
                 onChangeText={setPassword}
                 value={password}
             />
-            <UploadImage />
+            <UploadImage style={styles.longButton}/>
             <Button title="Sign Up" onPress={handleSignUp} />
             <Button
                 title="Already have an account? Login"
@@ -97,5 +97,15 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         marginTop: 8
-    }
+    },
+    longButton: {
+      borderWidth: 1,
+      borderRadius: 3,
+      padding: 10,
+      marginTop: 10,
+      marginBottom: 10,
+      backgroundColor: '#2B3158',
+      width: '90%',
+      alignItems: 'center'
+    },
 })

@@ -78,7 +78,7 @@ export default function Login(props) {
                 </TouchableOpacity>
                 <TouchableOpacity
                         style={styles.longButton}
-                        onPress={() => this.props.navigation.push('SignUp')}
+                        onPress={() => props.navigation.push('SignUp')}
                     >
                         <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
                 </TouchableOpacity>

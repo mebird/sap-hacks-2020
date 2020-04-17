@@ -4,7 +4,7 @@ import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
 export default class Loading extends React.Component {
     componentDidMount() {
         firebase.auth().onAuthStateChanged(user => {
-          this.props.navigation.navigate(user ? 'Main' : 'SignUp')
+          this.props.navigation.push(user ? 'Main' : 'SignUp')
         })
       }
   render() {

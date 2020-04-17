@@ -4,7 +4,6 @@ import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button } fro
 import { ScrollView } from 'react-native-gesture-handler';
 import { MonoText } from '../components/StyledText';
 import { ClientGroceryList } from "../components/GroceryList";
-import UploadImage from "../components/UploadImage";
 import fireDb from '../firebasedb';
 import populate from '../populate';
 
