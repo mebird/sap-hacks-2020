@@ -44,22 +44,25 @@ const baseWrapper = {
         .child('images/' + filename)
         .putString(fileRef, 'data_url');
 
-      uploadTask.on('state_changed', (snapshot) => {
-        let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED:
-            console.log('Upload is paused');
-            break;
-          case firebase.storage.TaskState.RUNNING:
-            console.log('Upload is running');
-            break;
-        }
-      }, (err) => {
-        alert(err)
-      }, () => {
-        console.log('Upload is finished');
-        return uploadTask.snapshot.ref.getDownloadURL();
+      return await new Promise((resolve, reject) => {
+        uploadTask.on('state_changed', (snapshot) => {
+          let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED:
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING:
+              console.log('Upload is running');
+              break;
+          }
+        }, (err) => {
+          alert(err);
+          reject(err);
+        }, () => {
+          console.log('Upload is finished');
+          resolve(uploadTask.snapshot.ref.getDownloadURL());
+        });
       });
     } catch (err) {
       alert(err);
@@ -140,25 +143,22 @@ const usersWrapper = {
   getUser: async (uuid) => await baseWrapper.getItem("user", uuid),
   addUser: async (user) => {
     const { email, image_uri } = user;
-    try {
-      const record = await baseWrapper.getItem("user", email);
-      if (!record) {
-        const auth_image = await baseWrapper.uploadImage(image_uri, email);
-        const userObj = {
-          email: user.email,
-          auth_image,
-          ...user,
-          my_orders: [],
-          pickup_orders: [],
-          balance: 0,
-          karma: 0,
-          is_verified: false
-        };
-        await baseWrapper.setObject("user", email, userObj);
+    const record = await baseWrapper.getItem("user", email);
+    if (!record) {
+      const auth_image = await baseWrapper.uploadImage(image_uri, email);
+      const userObj = {
+        email: user.email,
+        auth_image,
+        ...user,
+        my_orders: [],
+        pickup_orders: [],
+        balance: 0,
+        karma: 0,
+        is_verified: false
       };
-    } catch (err) {
-      alert(err);
-    }
+      console.log(userObj);
+      await baseWrapper.setObject("user", email, userObj);
+    } else { throw new Error("This email is already registered. Please log in instead!") };
   }
 }
 

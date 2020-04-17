@@ -14,7 +14,7 @@ export default class Login extends React.Component {
         errorMessage: null
     }
     handleLogin = () => {
-        const { email, pasword } = this.state
+        const { email, password } = this.state;
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password).then(() =>
@@ -69,7 +69,7 @@ export default class Login extends React.Component {
                     } />
                 <Button title="Don't have an account? Sign Up"
                     onPress={
-                        () => this.props.navigation.navigate('SignUp')
+                        () => this.props.navigation.navigate('Signup')
                     } />
             </View>
         )

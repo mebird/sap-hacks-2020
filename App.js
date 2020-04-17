@@ -59,9 +59,9 @@ function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} />
-            <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Signup" component={SignUp} />
+            <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
@@ -86,7 +86,9 @@ const staticUser = {
 
 const store = createStore({
   user: staticUser,
-  changeUser: action((state, payload) => { state.user = payload; })
+  uri: '',
+  changeUser: action((s, p) => { s.user = p }),
+  setImageUri: action((s, p) => { s.uri = p })
 });
 
 export default function AppWrapper(props) {

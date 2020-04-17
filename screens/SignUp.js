@@ -1,89 +1,87 @@
-import React from 'react'
+import React, { useState } from 'react'
 import * as firebase from "firebase/app";
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import fireDb from "../firebasedb";
+import UploadImage from '../components/UploadImage';
+import { useStoreState } from 'easy-peasy';
 
-export default class SignUp extends React.Component {
-    state = { name: '', location: '', phonenumber: '', auth_image: '', email: '', password: '', errorMessage: null }
-    // user = {
-    //     email: this.state.email,
-    //     password: this.state.password
-    // }
-    handleSignUp = () => {
-        fireDb.addUser({
-            name: this.state.name,
-            location: this.state.location,
-            phonenumber: this.state.phonenumber,
-            auth_image: this.state.auth_image,
-            email: this.state.email,
-            password: this.state.password
-        });
-        firebase
-            .auth()
-            .createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then(() => this.props.navigation.navigate('Main'))
-            .catch(error => this.setState({ errorMessage: error.message }))
+export default function SignUp(props) {
+    const image_uri = useStoreState(state => state.uri)
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [location, setLocation] = useState('');
+    const [phonenumber, setPhonenumber] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMsg, setErrorMsg] = useState(null);
+
+    const handleSignUp = () => {
+        const user = { name, location, phonenumber, image_uri, email, password };
+        if (!Object.values(user).reduce((prev, curr) => prev && !!curr)) {
+            setErrorMsg('Please fill out all fields below.');
+        } else {
+            firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then(() => fireDb.addUser(user))
+                .then(() => props.navigation.navigate('Main'))
+                .catch(error => setErrorMsg(error.message))
+        }
     }
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text>Sign Up</Text>
-                {this.state.errorMessage &&
-                    <Text style={{ color: 'red' }}>
-                        {this.state.errorMessage}
-                    </Text>}
-                <TextInput
-                    placeholder="Name"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={name => this.setState({ name })}
-                    value={this.state.name}
-                />
-                <TextInput
-                    placeholder="Location"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={location => this.setState({ location })}
-                    value={this.state.location}
-                />
-                <TextInput
-                    placeholder="phonenumber"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={phonenumber => this.setState({ phonenumber })}
-                    value={this.state.phonenumber}
-                />
-                <TextInput
-                    placeholder="Image"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={auth_image => this.setState({ auth_image })}
-                    value={this.state.auth_image}
-                />
-                <TextInput
-                    placeholder="Email"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={email => this.setState({ email })}
-                    value={this.state.email}
-                />
-                <TextInput
-                    secureTextEntry
-                    placeholder="Password"
-                    autoCapitalize="none"
-                    style={styles.textInput}
-                    onChangeText={password => this.setState({ password })}
-                    value={this.state.password}
-                />
-                <Button title="Sign Up" onPress={this.handleSignUp} />
-                <Button
-                    title="Already have an account? Login"
-                    onPress={() => this.props.navigation.navigate('Login')}
-                />
-            </View>
-        )
-    }
+
+    return (
+        <View style={styles.container}>
+            <Text>Sign Up</Text>
+            {errorMsg &&
+                <Text style={{ color: 'red' }}>
+                    {errorMsg}
+                </Text>}
+            <TextInput
+                placeholder="Name"
+                autoCapitalize="none"
+                style={styles.textInput}
+                onChangeText={setName}
+                value={name}
+            />
+            <TextInput
+                placeholder="Location"
+                autoCapitalize="none"
+                style={styles.textInput}
+                onChangeText={setLocation}
+                value={location}
+            />
+            <TextInput
+                placeholder="phonenumber"
+                autoCapitalize="none"
+                style={styles.textInput}
+                onChangeText={setPhonenumber}
+                value={phonenumber}
+            />
+            <TextInput
+                placeholder="Email"
+                autoCapitalize="none"
+                style={styles.textInput}
+                onChangeText={setEmail}
+                value={email}
+            />
+            <TextInput
+                secureTextEntry
+                placeholder="Password"
+                autoCapitalize="none"
+                style={styles.textInput}
+                onChangeText={setPassword}
+                value={password}
+            />
+            <UploadImage />
+            <Button title="Sign Up" onPress={handleSignUp} />
+            <Button
+                title="Already have an account? Login"
+                onPress={() => props.navigation.navigate('Login')}
+            />
+        </View>
+    )
+
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
