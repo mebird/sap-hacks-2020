@@ -76,7 +76,8 @@ const ordersWrapper = {
       const uuid = generateId();
 
       const order = {
-        groceries: groceries.map(g => ({ uuid: g.uuid, quantity: q.quantity })),
+        groceries: groceries.map(g => ({ uuid: g.uuid, quantity: g.quantity })),
+        cost: groceries.reduce((curr, prev) => curr += g.price * g.quantity, 0),
         location,
         client: userId
       };
@@ -86,9 +87,9 @@ const ordersWrapper = {
         .set(order);
 
       const user = await baseWrapper.getItem("user", userId);
-      await db.collection("user")
-        .doc(userId)
-        .update('my_orders', [...user['my_orders'], uuid]);
+      const ref = await db.collection("user").doc(userId);
+      await ref.update('my_orders', [...user['my_orders'], uuid]);
+      await ref.update('balance', user.balance - order.cost);
 
     } catch (err) {
       alert(err);
@@ -106,6 +107,10 @@ const ordersWrapper = {
     } catch (err) {
       alert(err);
     }
+  },
+  getOrders: async (userId) => {
+    const user = await baseWrapper.getItem("user", userId);
+    return await Promise.all(user['my_orders'].map(o => baseWrapper.getItem("orders", orderId)));
   },
   claimOrder: async (orderId, userId) => {
     try {

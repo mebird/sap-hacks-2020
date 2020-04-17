@@ -33,7 +33,7 @@ export default function DashboardScreen(props) {
                     onPress={() => props.navigation.push("Place an Order")}
                 />
                 <Button
-                    title="VIEW ORDER"
+                    title="VIEW CURRENT ORDERS"
                     buttonStyle={styles.viewOrderBtn}
                     onPress={() => props.navigation.push("View Current Orders")}
                 />
