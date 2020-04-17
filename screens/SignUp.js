@@ -26,7 +26,7 @@ export default function SignUp(props) {
                 .then(() => fireDb.addUser(user))
                 .then(() => fireDb.getUser(email))
                 .then(usr => setUserSession(usr))
-                .then(() => props.navigation.push('Main'))
+                .then(() => props.navigation.push('Root'))
                 .catch(error => setErrorMsg(error.message))
         }
     }

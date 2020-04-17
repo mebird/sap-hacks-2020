@@ -58,8 +58,8 @@ function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Loading" component={Loading} />
