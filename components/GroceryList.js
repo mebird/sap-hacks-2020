@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckBox } from 'react-native';
+import { CheckBox, View } from 'react-native';
 import firebase from '../firebasedb';
 
 function GroceryItem(props) {
@@ -30,9 +30,11 @@ export function ClientGroceryList(props) {
     // Attach updateProducts to the search header
     useEffect(() => { updateProducts("t", setProducts) }, []);
 
-    return <div>
+    return (
+        <View>
         {Object.values(products).map(p => GroceryItem({ ...p, onChange, viewMode }))}
-    </div>;
+        </View>
+    )
 }
 
 async function updateProducts(query, setProducts) {

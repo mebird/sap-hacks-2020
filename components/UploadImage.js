@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Image, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -38,8 +38,33 @@ export default function UploadImage() {
   };
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image" onPress={pickImage} />
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.longButton} onPress={() => pickImage()}>
+        <Text style={styles.btnText}>
+          Pick an image
+        </Text>
+      </TouchableOpacity>
     </View>
   );
+
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  longButton: {
+    borderWidth: 1,
+    borderRadius: 3,
+    padding: 10,
+    marginTop: 10,
+    backgroundColor: '#2B3158',
+    width: '90%',
+    alignItems: 'center'
+  },
+  btnText: {
+      color: 'white',
+  }
+})

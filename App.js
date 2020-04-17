@@ -60,7 +60,7 @@ function App(props) {
           <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Signup" component={SignUp} />
+            <Stack.Screen name="SignUp" component={SignUp} />
             <Stack.Screen name="Main" component={Main} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>

@@ -5,7 +5,7 @@ import {
     Text,
     TextInput,
     View,
-    Button
+    TouchableOpacity
 } from 'react-native'
 import fireDb from "../firebasedb";
 import { useStoreActions } from 'easy-peasy';
@@ -50,18 +50,41 @@ export default function Login(props) {
                 style={
                     styles.textInput
                 }
-                autoCapitalize="none"
-                placeholder="Password"
-                onChangeText={setPassword}
-                value={password} />
-            <Button title="Login"
-                onPress={handleLogin} />
-            <Button title="Don't have an account? Sign Up"
-                onPress={
-                    () => props.navigation.navigate('Signup')
-                } />
-        </View>
-    )
+                    autoCapitalize="none"
+                    placeholder="Email"
+                    onChangeText={
+                        email => this.setState({ email })
+                    }
+                    value={
+                        this.state.email
+                    } />
+                <TextInput secureTextEntry
+                    style={
+                        styles.textInput
+                    }
+                    autoCapitalize="none"
+                    placeholder="Password"
+                    onChangeText={
+                        password => this.setState({ password })
+                    }
+                    value={
+                        this.state.password
+                    } />
+                <TouchableOpacity
+                        style={styles.longButton}
+                        onPress={this.handleLogin}
+                    >
+                        <Text style={styles.btnText}> Login </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        style={styles.longButton}
+                        onPress={() => this.props.navigation.push('SignUp')}
+                    >
+                        <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
@@ -76,5 +99,17 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         marginTop: 8
+    },
+    longButton: {
+        borderWidth: 1,
+        borderRadius: 3,
+        padding: 10,
+        marginTop: 10,
+        backgroundColor: '#2B3158',
+        width: '90%',
+        alignItems: 'center'
+    },
+    btnText: {
+        color: 'white',
     }
 })
