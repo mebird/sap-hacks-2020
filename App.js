@@ -15,6 +15,9 @@ import SignUp from './screens/SignUp';
 import Loading from './screens/Loading';
 import DashboardScreen from './screens/DashboardScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import ViewOrderScreen from './screens/ViewOrderScreen';
+import BottomTabNavigator from './navigation/BottomTabNavigator';
+import ViewHistoryScreen from './screens/ViewHistoryScreen';
 
 
 const Stack = createStackNavigator();
@@ -71,11 +74,12 @@ function App(props) {
           <Stack.Navigator>
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="SignUp" component={SignUp} />
+            <Stack.Screen name="Root" component={BottomTabNavigator} />
             <Stack.Screen name="Dashboard" component={DashboardScreen} />
             <Stack.Screen name="User Profile" component={ProfileScreen} />
             <Stack.Screen name="Leaderboard" component={dummyDiv} />
-            <Stack.Screen name="History" component={dummyDiv} />
-            <Stack.Screen name="View Current Orders" component={dummyDiv} />
+            <Stack.Screen name="View History" component={ViewHistoryScreen} />
+            <Stack.Screen name="View Current Orders" component={ViewOrderScreen} />
             <Stack.Screen name="Place an Order" component={dummyDiv} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
