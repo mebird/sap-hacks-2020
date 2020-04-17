@@ -5,7 +5,7 @@ import {
     Text,
     TextInput,
     View,
-    Button
+    TouchableOpacity
 } from 'react-native'
 export default class Login extends React.Component {
     state = {
@@ -14,7 +14,7 @@ export default class Login extends React.Component {
         errorMessage: null
     }
     handleLogin = () => {
-        const { email, pasword } = this.state
+        const { email, password } = this.state
         firebase
             .auth()
             .signInWithEmailAndPassword(email, password).then(() =>
@@ -63,14 +63,18 @@ export default class Login extends React.Component {
                     value={
                         this.state.password
                     } />
-                <Button title="Login"
-                    onPress={
-                        this.handleLogin
-                    } />
-                <Button title="Don't have an account? Sign Up"
-                    onPress={
-                        () => this.props.navigation.navigate('SignUp')
-                    } />
+                <TouchableOpacity
+                        style={styles.longButton}
+                        onPress={this.handleLogin}
+                    >
+                        <Text style={styles.btnText}> Login </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                        style={styles.longButton}
+                        onPress={() => this.props.navigation.push('SignUp')}
+                    >
+                        <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -87,5 +91,17 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         marginTop: 8
+    },
+    longButton: {
+        borderWidth: 1,
+        borderRadius: 3,
+        padding: 10,
+        marginTop: 10,
+        backgroundColor: '#2B3158',
+        width: '90%',
+        alignItems: 'center'
+    },
+    btnText: {
+        color: 'white',
     }
 })

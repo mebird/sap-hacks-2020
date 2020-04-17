@@ -59,13 +59,12 @@ export default function HomeScreen() {
             <MonoText>screens/HomeScreen.js</MonoText>
             <ClientGroceryList />
           </View>
-
+          
           <Text style={styles.getStartedText}>
             Change any of the text, save the file, and your app will automatically reload.
-            <Button title={"Populate the database!"} onPress={() => populate()}>Populate the db</Button>
+            {/* <Button title="Populate the database!" onPress={() => populate()}>Populate the db</Button> */}
           </Text>
           <UploadImage />
-          <br />
           <Text style={styles.getStartedText}>
             {orders ? mapOrders() : 'Searching Orders'}
           </Text>
