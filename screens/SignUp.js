@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as firebase from "firebase/app";
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
 import fireDb from "../firebasedb";
 import UploadImage from '../components/UploadImage';
 import { useStoreState, useStoreActions } from 'easy-peasy';
@@ -76,11 +76,16 @@ export default function SignUp(props) {
                 value={password}
             />
             <UploadImage style={styles.longButton}/>
-            <Button title="Sign Up" onPress={() => handleSignUp()} />
-            <Button
-                title="Already have an account? Login"
-                onPress={() => props.navigation.navigate('Login')}
-            />
+            <TouchableOpacity style={styles.longButton} onPress={() => handleSignUp()}>
+                <Text style={styles.btnText}>
+                    Sign up
+                </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.longButton} onPress={() => props.navigation.push('Login')}>
+                <Text style={styles.btnText}>
+                Already have an account? Login
+                </Text>
+            </TouchableOpacity>
         </View>
     )
 
@@ -100,13 +105,15 @@ const styles = StyleSheet.create({
         marginTop: 8
     },
     longButton: {
-      borderWidth: 1,
-      borderRadius: 3,
-      padding: 10,
-      marginTop: 10,
-      marginBottom: 10,
-      backgroundColor: '#2B3158',
-      width: '90%',
-      alignItems: 'center'
+        borderWidth: 1,
+        borderRadius: 3,
+        padding: 10,
+        marginTop: 10,
+        backgroundColor: '#2B3158',
+        width: '90%',
+        alignItems: 'center'
     },
+    btnText: {
+        color: 'white'
+    }
 })
