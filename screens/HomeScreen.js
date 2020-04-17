@@ -64,7 +64,6 @@ export default function HomeScreen() {
             Change any of the text, save the file, and your app will automatically reload.
             {/* <Button title="Populate the database!" onPress={() => populate()}>Populate the db</Button> */}
           </Text>
-          <UploadImage />
           <Text style={styles.getStartedText}>
             {orders ? mapOrders() : 'Searching Orders'}
           </Text>
