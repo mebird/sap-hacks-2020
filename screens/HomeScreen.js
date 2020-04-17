@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { MonoText } from '../components/StyledText';
+import { ClientGroceryList } from "../components/GroceryList";
 import fireDb from '../firebasedb';
 
 export default function HomeScreen() {
@@ -10,17 +11,18 @@ export default function HomeScreen() {
   const [orders, setOrders] = React.useState();
 
   const mapOrders = () => {
-    return orders.map(order => 
-    <div key={order.client}>
-      <Text> e.g. List of orders </Text>
-      <br/>
-      <Text> Client: {order.client}  </Text>
-      <br/>
-      <Text> Location: {order.location} </Text>
-      <br/>
-      <Text> Delivery Person: {order.deliverer} </Text>
-    </div>
-  )};
+    return orders.map(order =>
+      <div key={order.client}>
+        <Text> e.g. List of orders </Text>
+        <br />
+        <Text> Client: {order.client}  </Text>
+        <br />
+        <Text> Location: {order.location} </Text>
+        <br />
+        <Text> Delivery Person: {order.deliverer} </Text>
+      </div>
+    )
+  };
   // Get firebase orders
   React.useEffect(() => {
     const getOrders = async () => {
@@ -53,12 +55,13 @@ export default function HomeScreen() {
 
           <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
             <MonoText>screens/HomeScreen.js</MonoText>
+            <ClientGroceryList />
           </View>
 
           <Text style={styles.getStartedText}>
             Change any of the text, save the file, and your app will automatically reload.
           </Text>
-          <br/>
+          <br />
           <Text style={styles.getStartedText}>
             {orders ? mapOrders() : 'Searching Orders'}
           </Text>
