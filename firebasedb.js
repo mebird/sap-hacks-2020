@@ -43,7 +43,7 @@ const baseWrapper = {
       const uploadTask = storageRef
         .child('images/' + filename)
         .putString(fileRef, 'data_url');
-  
+
       uploadTask.on('state_changed', (snapshot) => {
         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
@@ -59,10 +59,7 @@ const baseWrapper = {
         alert(err)
       }, () => {
         console.log('Upload is finished');
-        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-          console.log('File available at', downloadURL);
-        });
-        // Maja is going to update user auth url here
+        return uploadTask.snapshot.ref.getDownloadURL();
       });
     } catch (err) {
       alert(err);
@@ -142,12 +139,14 @@ const groceriesWrapper = {
 const usersWrapper = {
   getUser: async (uuid) => await baseWrapper.getItem("user", uuid),
   addUser: async (user) => {
-    const { email } = user;
+    const { email, image_uri } = user;
     try {
       const record = await baseWrapper.getItem("user", email);
       if (!record) {
+        const auth_image = await baseWrapper.uploadImage(image_uri, email);
         const userObj = {
           email: user.email,
+          auth_image,
           ...user,
           my_orders: [],
           pickup_orders: [],
@@ -155,7 +154,6 @@ const usersWrapper = {
           karma: 0,
           is_verified: false
         };
-        console.log(userObj);
         await baseWrapper.setObject("user", email, userObj);
       };
     } catch (err) {

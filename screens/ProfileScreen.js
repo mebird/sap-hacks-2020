@@ -12,7 +12,7 @@ function Item({ title }) {
 }
 
 export default function ProfileScreen() {
-    const { user: { karma = 0, name } } = useStoreState(state => state.user || { user: {} });
+    const { user: { karma = 0, name, auth_image } } = useStoreState(state => state.user || { user: {} });
     const recentHistory = [
         { title: 'Save on Foods' },
         { title: 'Shoppers Drug Mart' },
@@ -23,9 +23,7 @@ export default function ProfileScreen() {
             <View style={styles.profile}>
                 <Image
                     style={styles.profilePicture}
-                    source={{
-                        uri: 'https://i.pinimg.com/originals/9f/10/f6/9f10f61ab04adb749c4b762b6e543c26.jpg'
-                    }}
+                    source={{ uri: auth_image }}
                 />
                 <Text style={styles.userName}>{name}</Text>
                 <Text style={styles.text}>Karma {karma}</Text>
