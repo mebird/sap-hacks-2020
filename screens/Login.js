@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import * as firebase from "firebase/app";
-import {
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
-    TouchableOpacity
-} from 'react-native'
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, Image, ScrollView } from 'react-native'
 import fireDb from "../firebasedb";
 import { useStoreActions } from 'easy-peasy';
 
@@ -27,10 +21,15 @@ export default function Login(props) {
     }
 
     return (
-        <View style={
-            styles.container
-        }>
-            <Text>Login</Text>
+        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <View style={styles.logo}>
+                <Text style={styles.titleLabel}>StaySafe</Text>
+                <Image
+                    style={styles.logoPicture}
+                    source={require('../assets/images/on-demand-deliveries-polaris.png')}
+                />
+            </View>
+                <Text>Login</Text>
             {
                 errMsg && <Text style={
                     { color: 'red' }
@@ -70,7 +69,8 @@ export default function Login(props) {
                 >
                     <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
             </TouchableOpacity>
-            </View>
+
+        </ScrollView>
         )
     }
 
@@ -78,8 +78,26 @@ export default function Login(props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    contentContainer: {
+        paddingTop: 15,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+    },
+    logo: {
+        flex: 1,
+        alignItems: 'center',
+        marginVertical: 15,
+    },
+    logoPicture: {
+        height: 200,
+        width: 400,
+    },
+    titleLabel: {
+        margin: 2.5,
+        fontWeight: 'bold',
+        color: '#2B3158',
+        fontSize: 20
     },
     textInput: {
         height: 40,
