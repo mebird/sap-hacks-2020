@@ -14,6 +14,7 @@ import Login from './screens/Login';
 import Main from './screens/Main';
 import SignUp from './screens/SignUp';
 import Loading from './screens/Loading';
+import DashboardScreen from './screens/DashboardScreen';
 
 
 const Stack = createStackNavigator();
@@ -59,9 +60,12 @@ function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Signup" component={SignUp} />
+            <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="Leaderboard" component={() => <div>TODO</div>} />
+            <Stack.Screen name="History" component={() => <div>TODO</div>} />
+            <Stack.Screen name="View Current Orders" component={() => <div>TODO</div>} />
+            <Stack.Screen name="Place an Order" component={() => <div>TODO</div>} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
