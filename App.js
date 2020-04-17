@@ -10,6 +10,12 @@ import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 import { StoreProvider, createStore } from 'easy-peasy';
 
+import Login from './screens/Login';
+import Main from './screens/Main';
+import SignUp from './screens/SignUp';
+import Loading from './screens/Loading';
+
+
 const Stack = createStackNavigator();
 const store = createStore({});
 
@@ -54,6 +60,10 @@ function App(props) {
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
             <Stack.Screen name="Root" component={BottomTabNavigator} />
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Signup" component={SignUp} />
+            <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
