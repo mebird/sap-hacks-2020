@@ -21,7 +21,7 @@ const baseWrapper = {
     try {
       return await (await db.collection(collection).doc(id).get()).data();
     } catch (err) {
-      alert(err);
+      return null;
     }
   },
   setObject: async (collection, docId, object) => {
@@ -110,16 +110,21 @@ const usersWrapper = {
     const { email } = user;
     try {
       const record = await baseWrapper.getItem("user", email);
-      if (!record) await baseWrapper.setObject("user", email, {
-        ...user,
-        my_orders: [],
-        pickup_orders: [],
-        balance: 0,
-        karma: 0,
-        is_verified: false
-      })
+      if (!record) {
+        const userObj = {
+          email: user.email,
+          ...user,
+          my_orders: [],
+          pickup_orders: [],
+          balance: 0,
+          karma: 0,
+          is_verified: false
+        };
+        console.log(userObj);
+        await baseWrapper.setObject("user", email, userObj);
+      };
     } catch (err) {
-
+      alert(err);
     }
   }
 }
