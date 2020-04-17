@@ -22,6 +22,16 @@ const baseWrapper = {
       alert(err);
     }
   },
+  getCollectionWhole: async (collection) => {
+    try {
+      const ref = db.collection(collection);
+      const data = await ref.get();
+      console.log(data.docs);
+      return data.docs;
+    } catch (err) {
+      alert(err);
+    }
+  },
   getItem: async (collection, id) => {
     try {
       return await (await db.collection(collection).doc(id).get()).data();
@@ -71,18 +81,23 @@ const baseWrapper = {
 }
 
 const ordersWrapper = {
-  addOrder: async (groceries, location, userId) => {
+  addOrder: async (groceries, location, userId, priority) => {
     try {
       const uuid = generateId();
 
       const order = {
-        groceries: groceries.map(g => ({ uuid: g.uuid, quantity: q.quantity })),
+        groceries: groceries.map(g => ({ uuid: g.uuid, quantity: g.quantity })),
+        clientConf: false,
+        deliverer: 'Unconfirmed',
+        delivererConf: false,
+        hasBegun: false,
         location,
+        priority: priority,
         client: userId
       };
-
+      console.log('Here')
       await db.collection("orders")
-        .doc(uuid)
+        .doc(uuid + "")
         .set(order);
 
       const user = await baseWrapper.getItem("user", userId);
@@ -119,7 +134,25 @@ const ordersWrapper = {
     } catch (err) {
       alert(err);
     }
-  }
+  },
+  getOrders: async (email) => {
+    try {
+      const ordersRef = db.collection('orders');
+      const query = await ordersRef.where('client', '==', email).get();
+      return query.docs.map(doc => doc.data());
+    } catch (err) {
+      alert(err);
+    }
+  },
+  getJobs: async (name) => {
+    try {
+      const ordersRef = db.collection('orders');
+      const query = await ordersRef.where('deliverer', '==', name).get();
+      return query.docs;
+    } catch (err) {
+      alert(err);
+    }
+  },
 };
 
 const groceriesWrapper = {
@@ -140,7 +173,7 @@ const groceriesWrapper = {
 }
 
 const usersWrapper = {
-  getUser: async (uuid) => await baseWrapper.getItem("user", uuid),
+  getUser: async  (uuid) => await baseWrapper.getItem("user", uuid),
   addUser: async (user) => {
     const { email, image_uri } = user;
     const record = await baseWrapper.getItem("user", email);
@@ -172,5 +205,8 @@ const fireDb = {
   ...baseWrapper
 }
 
+const obj = { quantity: 3, uuid: 'bayberries' }
+const arr = [obj];
+fireDb.addOrder(arr, 'Safeway', 'abc@gmail.com', 'high')
 export default fireDb;
 

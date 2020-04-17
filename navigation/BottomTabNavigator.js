@@ -5,9 +5,13 @@ import TabBarIcon from '../components/TabBarIcon';
 import DashboardScreen from '../screens/DashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import Login from '../screens/Login';
+import HomeScreen from '../screens/HomeScreen';
+import LinksScreen from '../screens/LinksScreen';
+import AddItemScreen from '../screens/AddItemScreen';
+import YourJobs from '../screens/YourJobs';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+const INITIAL_ROUTE_NAME = 'Explore';
 
 export default function BottomTabNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -18,26 +22,26 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME} tabBarOptions={{ showLabel: false }}>
       <BottomTab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Your Jobs"
+        component={YourJobs}
         options={{
-          title: 'Profile',
+          title: 'Your Jobs',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="user" />,
         }}
       />
       <BottomTab.Screen
-        name="Dashboard"
-        component={Dashboard}
+        name="Explore"
+        component={DashboardScreen}
         options={{
-          title: 'Dashboard',
+          title: 'Explore',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="appstore-o" />,
         }}
       />
       <BottomTab.Screen
-        name="Login"
-        component={Login}
+        name="Profile"
+        component={ProfileScreen}
         options={{
-          title: 'Login',
+          title: 'Profile',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="profile" />,
         }}
       />
@@ -46,14 +50,5 @@ export default function BottomTabNavigator({ navigation, route }) {
 }
 
 function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-  console.log(routeName);
-  switch (routeName) {
-    case 'HomeScreen':
-      return 'HomeScreen';
-    case 'Login':
-      return 'Login';
-    case 'Profile':
-      return 'User Profile';
-  }
+  return route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
 }

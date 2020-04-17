@@ -6,6 +6,7 @@ import { MonoText } from '../components/StyledText';
 import { ClientGroceryList } from "../components/GroceryList";
 import fireDb from '../firebasedb';
 import populate from '../populate';
+import BottomTabNavigator from '../navigation/BottomTabNavigator';
 
 export default function HomeScreen() {
 
@@ -83,6 +84,7 @@ export default function HomeScreen() {
 
         </View>
       </View>
+      <BottomTabNavigator />
     </View>
   );
 }
