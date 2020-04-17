@@ -76,13 +76,17 @@ const ordersWrapper = {
       const uuid = generateId();
 
       const order = {
-        groceries: groceries.map(g => ({ uuid: g.uuid, quantity: q.quantity })),
+        groceries: groceries.map(g => ({ uuid: g.uuid, quantity: g.quantity })),
+        clientConf: false,
+        deliverer: 'Unconfirmed',
+        delivererConf: false,
+        hasBegun: false,
         location,
         client: userId
       };
-
+      console.log('Here')
       await db.collection("orders")
-        .doc(uuid)
+        .doc(uuid + "")
         .set(order);
 
       const user = await baseWrapper.getItem("user", userId);
