@@ -1,17 +1,11 @@
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-import firebaseConfig from './firebase.config'
+import firebaseConfig from './firebase.config.js'
 
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-
-const fireDb = {
-  ...ordersWrapper,
-  ...groceriesWrapper,
-  ...baseWrapper
-}
 
 const baseWrapper = {
   getCollection: async (collection) => {
@@ -85,8 +79,11 @@ const groceriesWrapper = {
     try {
       return await db
         .collection("grocery_items")
+        .orderBy('uuid')
         .startAt(query)
-        .endAt(`${query}\uf8ff`);
+        .endAt(`${query}\uf8ff`)
+        .get()
+        .then(res => res.docs.map(d => d.data()));
     } catch (err) {
       alert(err);
     }
@@ -99,5 +96,12 @@ const usersWrapper = {
 }
 
 const generateId = () => Math.floor(Math.random() * 90000) + 10000;
+
+const fireDb = {
+  ...ordersWrapper,
+  ...groceriesWrapper,
+  ...baseWrapper
+}
+
 export default fireDb;
 

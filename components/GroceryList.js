@@ -28,7 +28,7 @@ export function ClientGroceryList(props) {
     const onChange = ({ uuid, checked, quantity }) => setProducts(products => ({ ...products, [uuid]: { ...products[uuid], checked, quantity } }));
 
     // Attach updateProducts to the search header
-    useEffect(() => { updateProducts("eggs", setProducts) }, []);
+    useEffect(() => { updateProducts("t", setProducts) }, []);
 
     return <div>
         {Object.values(products).map(p => GroceryItem({ ...p, onChange, viewMode }))}
@@ -37,13 +37,15 @@ export function ClientGroceryList(props) {
 
 async function updateProducts(query, setProducts) {
     searchProducts(query)
-        .then(res => setProducts(products => {
-            let newProducts = { ...products };
-            res.forEach(p => {
-                if (!newProducts.has(p.uuid)) newProducts.set(p.uuid, p);
-            });
-            return newProducts;
-        }));
+        .then(res =>
+            setProducts(products => {
+                console.log(res);
+                let newProducts = { ...products };
+                res.forEach(p => {
+                    if (!newProducts.has(p.uuid)) newProducts.set(p.uuid, p);
+                });
+                return newProducts;
+            }));
 }
 
 async function searchProducts(query) {
