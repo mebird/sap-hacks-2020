@@ -105,7 +105,23 @@ const groceriesWrapper = {
 }
 
 const usersWrapper = {
-  getUser: async (uuid) => await baseWrapper.getItem("user", uuid)
+  getUser: async (uuid) => await baseWrapper.getItem("user", uuid),
+  addUser: async (user) => {
+    const { email } = user;
+    try {
+      const record = await baseWrapper.getItem("user", email);
+      if (!record) await baseWrapper.setObject("user", email, {
+        ...user,
+        my_orders: [],
+        pickup_orders: [],
+        balance: 0,
+        karma: 0,
+        is_verified: false
+      })
+    } catch (err) {
+
+    }
+  }
 }
 
 const generateId = () => Math.floor(Math.random() * 90000) + 10000;
@@ -113,6 +129,7 @@ const generateId = () => Math.floor(Math.random() * 90000) + 10000;
 const fireDb = {
   ...ordersWrapper,
   ...groceriesWrapper,
+  ...usersWrapper,
   ...baseWrapper
 }
 
