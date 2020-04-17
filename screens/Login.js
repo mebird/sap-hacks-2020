@@ -50,38 +50,26 @@ export default function Login(props) {
                 style={
                     styles.textInput
                 }
-                    autoCapitalize="none"
-                    placeholder="Email"
-                    onChangeText={
-                        email => setEmail(email)
-                    }
-                    value={
-                        email
+                autoCapitalize="none"
+                placeholder="Password"
+                onChangeText={
+                    password => setPassword(password)
+                }
+                value={
+                    password
                     } />
-                <TextInput secureTextEntry
-                    style={
-                        styles.textInput
-                    }
-                    autoCapitalize="none"
-                    placeholder="Password"
-                    onChangeText={
-                        password => setPassword(password)
-                    }
-                    value={
-                        password
-                    } />
-                <TouchableOpacity
-                        style={styles.longButton}
-                        onPress={() => handleLogin()}
-                    >
-                        <Text style={styles.btnText}> Login </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                        style={styles.longButton}
-                        onPress={() => props.navigation.push('SignUp')}
-                    >
-                        <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
-                </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.longButton}
+                    onPress={() => handleLogin()}
+                >
+                    <Text style={styles.btnText}> Login </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.longButton}
+                    onPress={() => props.navigation.push('SignUp')}
+                >
+                    <Text style={styles.btnText}> Don't have an account? Sign Up </Text>
+            </TouchableOpacity>
             </View>
         )
     }
