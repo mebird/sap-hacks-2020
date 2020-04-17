@@ -1,21 +1,24 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
-import { Button } from 'react-native-elements';
-import * as React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
-import { render } from 'react-dom';
+import { Button, Overlay } from 'react-native-elements';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import { useStoreState } from 'easy-peasy';
+import AddItemScreen from './AddItemScreen';
 
-function Item({ title }) {
+function Item({ uuid, price, quantity }) {
     return (
         <View style={styles.item}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={styles.title}>{uuid}</Text>
+            <Text style={styles.title}>{price}</Text>
+            <Text style={styles.title}>{quantity}</Text>
         </View>
     );
 }
 
 export default function PlaceOrder(props) {
-    
+    const { items } = useStoreState(s => s.myOrder);
+    const [popover, setPopover] = useState(false);
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.fixToText}>
@@ -24,16 +27,26 @@ export default function PlaceOrder(props) {
                     titleStyle={{ color: '#2B3158' }}
                     type="outline"
                     buttonStyle={styles.addItem}
+                    onPress={() => setPopover(p => !p)}
                 />
             </View>
 
-            <View style={styles.fixToText}> 
+            <Overlay overlayStyle={styles.overlay} isVisible={popover}>
+                <AddItemScreen onPress={() => setPopover(p => !p)} />
+            </Overlay>
+
+            <FlatList
+                data={items}
+                renderItem={({ item }) => Item(item)}
+                keyExtractor={(item, i) => `${i}`} />
+
+            <View style={styles.fixToText}>
                 <Button
                     title="Back"
                     titleStyle={{ color: '#2B3158' }}
                     type="outline"
                     buttonStyle={styles.placeOrderBtn}
-                    onPress={() => props.navigation.push("DashboardScreen")}
+                    onPress={() => props.navigation.push("Dashboard")}
                 />
             </View>
 
@@ -53,7 +66,7 @@ const styles = StyleSheet.create({
     placeOrderBtn: {
         backgroundColor: '#F2F3FA',
         borderColor: '#2B3158',
-        height: 100,
+        height: 50,
         width: 180,
         marginHorizontal: 10,
     },
@@ -111,6 +124,10 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         padding: 10,
         marginTop: 10,
+    },
+    overlay: {
+        borderRadius: 3,
+        color: `#F2F3FA`
     },
     title: {},
 });

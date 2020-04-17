@@ -31,7 +31,7 @@ export default function DashboardScreen(props) {
                     titleStyle={{ color: '#2B3158' }}
                     type="outline"
                     buttonStyle={styles.placeOrderBtn}
-                    onPress={() => props.navigation.push("PlaceOrder")}
+                    onPress={() => props.navigation.push("Place Order")}
                 />
                 <Button
                     title="VIEW ORDER"

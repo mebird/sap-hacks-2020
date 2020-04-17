@@ -5,7 +5,7 @@ import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {decode, encode} from 'base-64';
+import { decode, encode } from 'base-64';
 
 import useLinking from './navigation/useLinking';
 import { StoreProvider, createStore, action } from 'easy-peasy';
@@ -21,8 +21,8 @@ const Stack = createStackNavigator();
 
 function App(props) {
   // DO NOT REMOVE
-  if (!global.btoa) {  global.btoa = encode }
-  if (!global.atob) { global.atob = decode } 
+  if (!global.btoa) { global.btoa = encode }
+  if (!global.atob) { global.atob = decode }
   // OR ELSE LOGIN BREAKS
 
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -31,7 +31,7 @@ function App(props) {
   const { getInitialState } = useLinking(containerRef);
 
   const dummyDiv = () => {
-    return  (
+    return (
       <Text>TODO</Text>
     )
   }
@@ -75,7 +75,7 @@ function App(props) {
             <Stack.Screen name="Leaderboard" component={dummyDiv} />
             <Stack.Screen name="History" component={dummyDiv} />
             <Stack.Screen name="View Current Orders" component={dummyDiv} />
-            <Stack.Screen name="PlaceOrder" component={PlaceOrder} />
+            <Stack.Screen name="Place Order" component={PlaceOrder} />
             <Stack.Screen name="Loading" component={Loading} />
           </Stack.Navigator>
         </NavigationContainer>
@@ -101,8 +101,13 @@ const staticUser = {
 const store = createStore({
   user: staticUser,
   uri: '',
+  myOrder: {
+    items: [],
+    addItem: action((s, p) => { s.order.push(p) }),
+    clearItem: action((s, p) => { s.prder = s.filter(i => i.uuid != p.uuid) }),
+  },
   changeUser: action((s, p) => { s.user = p }),
-  setImageUri: action((s, p) => { s.uri = p })
+  setImageUri: action((s, p) => { s.uri = p }),
 });
 
 export default function AppWrapper(props) {

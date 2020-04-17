@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
-import * as React from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Button, FlatList } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import { useStoreActions } from 'easy-peasy';
 
 function Item({ title, dashed }) {
     return (
@@ -12,12 +13,21 @@ function Item({ title, dashed }) {
     );
 }
 
-export default function AddItemScreen() {
+export default function AddItemScreen(props) {
+    const [item, setItem] = useState(null);
+    const { addItem } = useStoreActions(s => s.myOrder);
+
     const items = [
         { title: 'Coca-Cola Soft Drinks, Regular, 355 mL, 24/CT' },
         { title: 'Shoppers Drug Mart' },
         { title: 'Whole Foods Market' },
     ];
+
+    const onPress = () => {
+        if (item) addItem(item);
+        props.onPress();
+    }
+
     return (
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.items}>
@@ -26,7 +36,7 @@ export default function AddItemScreen() {
                     renderItem={({ item }) => <Item title={item.title} />}
                     keyExtractor={(item, i) => `${i}`}
                 />
-                <Item title="Add Item" dashed />
+                <Button title="Add Item" onPress={onPress} dashed />
             </View>
         </ScrollView>
     );
