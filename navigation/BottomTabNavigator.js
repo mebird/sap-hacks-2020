@@ -4,7 +4,7 @@ import * as React from 'react';
 import TabBarIcon from '../components/TabBarIcon';
 import DashboardScreen from '../screens/DashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import LinksScreen from '../screens/LinksScreen';
+import Login from '../screens/Login';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -26,18 +26,18 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Explore"
-        component={DashboardScreen}
+        name="Dashboard"
+        component={Dashboard}
         options={{
-          title: 'Explore',
+          title: 'Dashboard',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="appstore-o" />,
         }}
       />
       <BottomTab.Screen
-        name="Leaderboard"
-        component={LinksScreen}
+        name="Login"
+        component={Login}
         options={{
-          title: 'Leaderboard',
+          title: 'Login',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="profile" />,
         }}
       />
@@ -47,11 +47,12 @@ export default function BottomTabNavigator({ navigation, route }) {
 
 function getHeaderTitle(route) {
   const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
+  console.log(routeName);
   switch (routeName) {
-    case 'Home':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
+    case 'HomeScreen':
+      return 'HomeScreen';
+    case 'Login':
+      return 'Login';
     case 'Profile':
       return 'User Profile';
   }
