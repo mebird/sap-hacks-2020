@@ -150,6 +150,7 @@ const usersWrapper = {
         email: user.email,
         auth_image,
         ...user,
+        image_uri: '',
         my_orders: [],
         pickup_orders: [],
         balance: 0,

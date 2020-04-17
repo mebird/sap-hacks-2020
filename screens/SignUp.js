@@ -3,9 +3,10 @@ import * as firebase from "firebase/app";
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 import fireDb from "../firebasedb";
 import UploadImage from '../components/UploadImage';
-import { useStoreState } from 'easy-peasy';
+import { useStoreState, useStoreActions } from 'easy-peasy';
 
 export default function SignUp(props) {
+    const setUserSession = useStoreActions(state => state.changeUser);
     const image_uri = useStoreState(state => state.uri)
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -23,7 +24,9 @@ export default function SignUp(props) {
                 .auth()
                 .createUserWithEmailAndPassword(email, password)
                 .then(() => fireDb.addUser(user))
-                .then(() => props.navigation.navigate('Main'))
+                .then(() => fireDb.getUser(email))
+                .then(usr => setUserSession(usr))
+                .then(() => props.navigation.push('Main'))
                 .catch(error => setErrorMsg(error.message))
         }
     }
