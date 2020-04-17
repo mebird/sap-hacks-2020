@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
+import DashboardScreen from '../screens/DashboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import LinksScreen from '../screens/LinksScreen';
 
@@ -26,10 +26,10 @@ export default function BottomTabNavigator({ navigation, route }) {
         }}
       />
       <BottomTab.Screen
-        name="Explore"
-        component={HomeScreen}
+        name="Dashboard"
+        component={DashboardScreen}
         options={{
-          title: 'Explore',
+          title: 'Dashboard',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="appstore-o" />,
         }}
       />
@@ -46,14 +46,5 @@ export default function BottomTabNavigator({ navigation, route }) {
 }
 
 function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
-  switch (routeName) {
-    case 'Home':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
-    case 'Profile':
-      return 'User Profile';
-  }
+  return route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME; 
 }
