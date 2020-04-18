@@ -6,8 +6,8 @@ import UploadImage from '../components/UploadImage';
 import { useStoreState, useStoreActions } from 'easy-peasy';
 
 export default function SignUp(props) {
-    const setUserSession = useStoreActions(state => state.changeUser);
-    const image_uri = useStoreState(state => state.uri)
+    const setUserSession = useStoreActions(s => s.changeUser);
+    const image = useStoreState(s => s.image);
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [location, setLocation] = useState('');
@@ -16,15 +16,12 @@ export default function SignUp(props) {
     const [errorMsg, setErrorMsg] = useState(null);
 
     const handleSignUp = () => {
-        const user = { name, location, phonenumber, image_uri, email, password };
+        const user = { name, location, phonenumber, image, email, password };
         if (!Object.values(user).reduce((prev, curr) => prev && !!curr)) {
             setErrorMsg('Please fill out all fields below.');
         } else {
-            fireDb.uploadImage(image_uri);
-            firebase
-                .auth()
-                .createUserWithEmailAndPassword(email, password)
-                .then(() => fireDb.addUser(user))
+            fireDb
+                .addUser(user)
                 .then(() => fireDb.getUser(email))
                 .then(usr => setUserSession(usr))
                 .then(() => props.navigation.push('Root'))
@@ -75,7 +72,7 @@ export default function SignUp(props) {
                 onChangeText={setPassword}
                 value={password}
             />
-            <UploadImage style={styles.longButton}/>
+            <UploadImage style={styles.longButton} />
             <TouchableOpacity style={styles.longButton} onPress={() => handleSignUp()}>
                 <Text style={styles.btnText}>
                     Sign up
@@ -83,7 +80,7 @@ export default function SignUp(props) {
             </TouchableOpacity>
             <TouchableOpacity style={styles.longButton} onPress={() => props.navigation.push('Login')}>
                 <Text style={styles.btnText}>
-                Already have an account? Login
+                    Already have an account? Login
                 </Text>
             </TouchableOpacity>
         </View>

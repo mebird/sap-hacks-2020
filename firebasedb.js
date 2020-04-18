@@ -3,14 +3,13 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage";
 import firebaseConfig from './firebase.config.js'
+import * as FileSystem from 'expo-file-system';
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.firestore();
 const storage = firebase.storage();
-
-const storageRef = storage.ref();
 
 const baseWrapper = {
   getCollection: async (collection) => {
@@ -41,18 +40,20 @@ const baseWrapper = {
   },
   setObject: async (collection, docId, object) => {
     try {
-      const ref = db.collection(collection)
+      const ref = await db.collection(collection)
         .doc(docId)
         .set(object);
     } catch (err) {
       alert(err);
     }
   },
-  uploadImage: async (fileRef, filename) => {
+  uploadImage: async (image, filename) => {
+    const loc = image.path || image.uri;
     try {
-      const uploadTask = storageRef
-        .child('images/' + filename)
-        .putString(fileRef, 'data_url');
+      const base64 = await FileSystem.readAsStringAsync(loc, { encoding: 'base64' });
+      const uploadTask = storage
+        .ref('images/' + filename)
+        .putString(`data:image/jpeg;base64,${base64}`, 'data_url');
 
       return await new Promise((resolve, reject) => {
         uploadTask.on('state_changed', (snapshot) => {
@@ -75,7 +76,8 @@ const baseWrapper = {
         });
       });
     } catch (err) {
-      alert(err);
+      console.log(err.message);
+      throw new Error('Unable to upload image. Please try again.');
     }
   }
 }
@@ -174,26 +176,35 @@ const groceriesWrapper = {
 }
 
 const usersWrapper = {
-  getUser: async  (uuid) => await baseWrapper.getItem("user", uuid),
+  getUser: async (uuid) => await baseWrapper.getItem("user", uuid),
   addUser: async (user) => {
-    const { email, image_uri } = user;
+    const { email, image, password } = user;
     const record = await baseWrapper.getItem("user", email);
     if (!record) {
-      const auth_image = await baseWrapper.uploadImage(image_uri, email);
-      const userObj = {
-        email: user.email,
-        auth_image,
-        ...user,
-        image_uri: '',
-        my_orders: [],
-        pickup_orders: [],
-        balance: 0,
-        karma: 0,
-        is_verified: false
-      };
-      console.log(userObj);
-      await baseWrapper.setObject("user", email, userObj);
-    } else { throw new Error("This email is already registered. Please log in instead!") };
+      try {
+        await firebase.auth().createUserWithEmailAndPassword(email, password);
+        const auth_image = await baseWrapper.uploadImage(image, email);
+        const userObj = {
+          email: user.email,
+          auth_image,
+          ...user,
+          image: '',
+          my_orders: [],
+          pickup_orders: [],
+          balance: 0,
+          karma: 0,
+          is_verified: false
+        };
+        await baseWrapper.setObject("user", email, userObj);
+      } catch (e) {
+        // Delete the user in the case we run into snags with the img upload
+        const loggedInUser = firebase.auth().currentUser;
+        if (loggedInUser) await loggedInUser.delete();
+        throw e;
+      }
+    } else {
+      throw new Error("This email is already registered. Please log in instead!")
+    };
   }
 }
 
@@ -206,8 +217,5 @@ const fireDb = {
   ...baseWrapper
 }
 
-const obj = { quantity: 3, uuid: 'bayberries' }
-const arr = [obj];
-fireDb.addOrder(arr, 'Safeway', 'abc@gmail.com', 'high')
 export default fireDb;
 

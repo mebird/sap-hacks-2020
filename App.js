@@ -110,7 +110,7 @@ const staticUser = {
 
 const store = createStore({
   user: staticUser,
-  uri: '',
+  image: null,
   karma: 0,
   myOrder: {
     items: [],
@@ -124,7 +124,7 @@ const store = createStore({
     }),
   },
   changeUser: action((s, p) => { s.user = p }),
-  setImageUri: action((s, p) => { s.uri = p }),
+  setImage: action((s, p) => { s.image = p }),
   changeKarma: action((s, p) => { s.karma = p })
 });
 

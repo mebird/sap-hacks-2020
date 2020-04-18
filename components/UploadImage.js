@@ -3,11 +3,10 @@ import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import { useStoreActions } from 'easy-peasy';
+import { useStoreActions, useStoreState } from 'easy-peasy';
 
 export default function UploadImage(props) {
-  const setUri = useStoreActions(s => s.setImageUri);
-
+  const setImage = useStoreActions(s => s.setImage);
   React.useEffect(() => {
     const getPermissionAsync = async () => {
       if (Constants.platform.ios) {
@@ -29,27 +28,26 @@ export default function UploadImage(props) {
         quality: 1,
       });
       if (!result.cancelled) {
-        setUri(result.uri);
+        setImage(result);
       }
-      console.log(result);
     } catch (err) {
-      console.log(err);
+      alert(err);
     }
   };
 
   return (
-      <TouchableOpacity style={props.style} onPress={() => pickImage()}>
-        <Text style={styles.btnText}>
-          Pick an image
+    <TouchableOpacity style={props.style} onPress={() => pickImage()}>
+      <Text style={styles.btnText}>
+        Pick an image
         </Text>
-      </TouchableOpacity>
+    </TouchableOpacity>
   );
 
 }
 
 const styles = StyleSheet.create({
   btnText: {
-      color: 'white',
+    color: 'white',
   },
   longButton: {
     borderWidth: 1,
